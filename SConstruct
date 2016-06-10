@@ -99,14 +99,14 @@ def install_to_out(target, source, env):
     assert str(source[0]).endswith('.yaml')
     prefix = str(source[0])[:-len('.yaml')]
     for f in source[1:]:
-        assert str(f).startswith(prefix)
+        assert str(f).startswith(prefix) or str(f).startswith(prefix.replace('Src/', 'Out/')), (str(f), prefix)
         suffix = str(f)[len(prefix):]
         if suffix.startswith('.image'):
             suffix = suffix[len('.image'):]
         dest_path = 'gh-pages/Mon/' + name + suffix
         Execute(Copy(dest_path, f))
 
-LOCAL_LINK_RE = re.compile(r'\[\[([^ \]|]+)\]\]')
+LOCAL_LINK_RE = re.compile(r'\[\[(Mon:[^ \]|]+)\]\]')
 
 def yaml_scan(node, env, path):
     contents = node.get_text_contents()
@@ -118,16 +118,16 @@ yaml_scanner = Scanner(function = yaml_scan,
 env = Environment()
 env.Append(SCANNERS = yaml_scanner)
 
-DOT_IMAGE_DOT_SVG_RE = re.compile(r'(\.image)?\.svg$')
+STEM_RE = re.compile(r'^Src/(.+?)(?:\.image)?\.svg$')
 
 all_yaml = []
 for f in Glob('Src/*.svg'):
-    stem = DOT_IMAGE_DOT_SVG_RE.sub('', str(f))
-    pngf = stem + '-200.png'
-    bigpngf = stem + '-500.png'
-    yamlf = stem + '.yaml'
+    stem = STEM_RE.search(str(f)).group(1)
+    pngf = 'Out/' + stem + '-200.png'
+    bigpngf = 'Out/' + stem + '-500.png'
+    yamlf = 'Src/' + stem + '.yaml'
     all_yaml.append(yamlf)
-    htmlf = stem + '.html'
+    htmlf = 'Out/' + stem + '.html'
     c = Command(pngf, f, 'bin/svg_to_png $SOURCE $TARGET 200')
     Depends(c, 'bin/svg_to_png')
     c = Command(bigpngf, f, 'bin/svg_to_png $SOURCE $TARGET 500')
