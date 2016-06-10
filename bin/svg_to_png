@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+INKSCAPE="/Applications/Inkscape.app/Contents/Resources/bin/inkscape"
+
+height="$("$INKSCAPE" -w $3 -e `pwd`/"$2" `pwd`/"$1" | awk '/exported to/ {print $7}')"
+
+if [ $height -gt $3 ] ; then
+    "$INKSCAPE" -h $3 -e `pwd`/"$2" `pwd`/"$1" > /dev/null
+fi
