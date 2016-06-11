@@ -16,6 +16,8 @@ source_map = {
     'KamonNoJiten': u'Takasawa Hitoshi (高澤等). <i>Kamon no Jiten (家紋の事典; “Family Crest Encyclopedia”)</i>. Ed. Chikano Shigeru (千鹿野茂). Tōkyōdō Shuppan (東京堂出版), 2008.',
     'FCoJ': '<i>Family Crests of Japan</i>. Stone Bridge Press, 2007.',
     'KenmonShokamon': u'<i>Kenmon Shokamon (見聞諸家紋; “Various Observed Family Crests”)</i>. 1467–1470. <a href="http://dl.ndl.go.jp/info:ndljp/pid/2533035">http://dl.ndl.go.jp/info:ndljp/pid/2533035</a>.',
+    'OUmajirushi': u'Xavid “Kihō” Pretzer. <i>O-umajirushi: A 17th-Century Compendium of Samurai Heraldry</i>. The Academy of the Four Directions. 2015.',
+    'SamuraiSourcebook': 'Turnbull, Stephen. <i>The Samurai Sourcebook</i>. Cassell & Co, 2000.',
 }
 wiki_sources = {
     'Commons': ('Wikimedia Commons',
@@ -51,6 +53,9 @@ def get_local_link(match):
     name = match.group(1)
     return '<a href="%s.html">%s</a>' % (name, name)
 
+def get_name(f):
+    return os.path.basename(str(f)).rsplit('.', 1)[0]
+
 CITE_RE = re.compile(r'<<[^>]+>>')
 def yaml_mako(suf):
     def yaml_mako_impl(target, source, env):
@@ -58,8 +63,11 @@ def yaml_mako(suf):
         tmpl = Template(filename=str(makof))
         with open(str(yamlf)) as fil:
             d = yaml.load(fil)
-        d['name'] = os.path.basename(str(yamlf)).rsplit('.', 1)[0]
+        d['name'] = get_name(yamlf)
         sources = []
+        if 'sources' in d:
+            for s in d['sources'].split('; '):
+                sources.append(sourcefmt('<<'+s+'/>>'))
         if 'date' in d and isinstance(d['date'], basestring) and '<' in d['date']:
             d['date'], source = d['date'].split('<', 1)
             sources.append(sourcefmt('<' + source))
@@ -87,7 +95,7 @@ def yaml_mako(suf):
                     sources.append(s + ' (for Japanese)')
         d['sources'] = '<br />'.join(sources)
         d['categories'] = ', '.join('<a href="../#%s">%s</a>' % ((c,) * 2)
-                                    for c in tags_to_categories(d['tags']))
+                                    for c in get_categories(d))
         d['suffix'] = suf
         rendered = tmpl.render(**d)
         assert '<<' not in rendered, d
@@ -122,7 +130,13 @@ for f in Glob('Src/*.svg') + Glob('Src/*.png'):
     c = Command(htmlf, ['Src/html.mak', yamlf], yaml_mako(suf))
     Depends(c, 'SConstruct')
 
-def tags_to_categories(tags):
+def get_categories(d):
+    if 'categories' in d:
+        for c in d['categories'].split(', '):
+            yield c
+        return
+    assert 'tags' in d, d
+    tags = d['tags']
     for t in tags.split(', '):
         if t.startswith('[[MP:'):
             yield re.sub(r'([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))',
@@ -137,8 +151,7 @@ def make_index(target, source, env):
         with open(str(yamlf)) as fil:
             d = yaml.load(fil)
         found = False
-        assert 'tags' in d, str(yamlf)
-        for category in tags_to_categories(d['tags']):
+        for category in get_categories(d):
             if category not in category_map:
                 category_map[category] = []
             if 'date' in d:
@@ -147,8 +160,7 @@ def make_index(target, source, env):
                     date = int(CITE_RE.sub('', date))
             else:
                 date = 'Modern'
-            category_map[category].append(
-                (date, d['name'] if 'name' in d else d['translation']))
+            category_map[category].append((date, get_name(yamlf)))
             found = True
         assert found, (str(yamlf), d['tags'])
     for c in category_map:
