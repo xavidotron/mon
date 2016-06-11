@@ -38,7 +38,7 @@ def sourcefmt(s):
         numbit = ' fig. ' + num
     else:
         assert len(parts) == 1, parts
-        page = parts[0]
+        page = parts[0].replace(',', ', ')
     if ',' in page or '-' in page:
         pp = 'pp'
     else:
@@ -51,6 +51,7 @@ def get_local_link(match):
     name = d['name'] if 'name' in d else d['translation']
     return '<a href="%s.html">%s</a>' % (name, name)
 
+CITE_RE = re.compile(r'<<[^>]+>>')
 def yaml_mako(target, source, env):
     makof, yamlf = source
     tmpl = Template(filename=str(makof))
@@ -63,15 +64,16 @@ def yaml_mako(target, source, env):
         d['date'], source = d['date'].split('<', 1)
         sources.append(sourcefmt('<' + source))
     if 'notes' in d:
-        for s in re.findall(r'<<[^>]+>>', d['notes']):
+        for s in CITE_RE.findall(d['notes']):
             s = sourcefmt(s)
             if s not in sources:
                 sources.append(s)
-        d['notes'] = re.sub(r'<<[^>]+>>', '', d['notes'])
+        d['notes'] = CITE_RE.sub('', d['notes'])
         d['notes'] = re.sub(r'\[\[([^|\]]+)\|([^\]]+)\]\]',
                             r'<a href="\1">\2</a>',
                             d['notes'])
         d['notes'] = LOCAL_LINK_RE.sub(get_local_link, d['notes'])
+        d['notes'] = re.sub(r'//([^/]+)//', r'<i>\1</i>', d['notes'])
     if 'imagesource' in d:
         s = sourcefmt(d['imagesource'])
         if s not in sources:
@@ -157,8 +159,14 @@ def make_index(target, source, env):
         for category in tags_to_categories(d['tags']):
             if category not in category_map:
                 category_map[category] = []
+            if 'date' in d:
+                date = d['date']
+                if isinstance(date, basestring) and date != 'Modern':
+                    date = int(CITE_RE.sub('', date))
+            else:
+                date = 'Modern'
             category_map[category].append(
-                d['name'] if 'name' in d else d['translation'])
+                (date, d['name'] if 'name' in d else d['translation']))
             found = True
         assert found, (str(yamlf), d['tags'])
     for c in category_map:

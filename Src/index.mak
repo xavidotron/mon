@@ -27,8 +27,8 @@ span {
 %for c in sorted(category_map):
   <h3 id="${c}">${c}</h3>
 
-  %for name in category_map[c]:
-    <div><a href="Mon/${name}.html"><span><img src="Mon/${name}-200.png" /></span><br />${name}</a></div>
+  %for year, name in category_map[c]:
+    <div><a href="Mon/${name}.html"><span><img src="Mon/${name}-200.png" /></span><br />${name} (${year})</a></div>
   %endfor
 %endfor
 </body>
