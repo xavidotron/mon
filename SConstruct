@@ -29,7 +29,12 @@ wiki_sources = {
 def sourcefmt(s):
     assert s.startswith('<<') and s.endswith('/>>'), s
     assert ' ' in s or '\n' in s, s
-    source,rest = s[2:-3].split(None, 1)
+    s = s[2:-3]
+    if 'http://' in s or 'https://' in s:
+        title, url, sname = s.split(', ')
+        return u'“<a href="%s">%s</a>”. <i>%s</i>.' % (
+            url, title, sname)
+    source,rest = s.split(None, 1)
     if source in wiki_sources:
         sname, prefix = wiki_sources[source]
         return u'“<a href="%s">%s</a>”. <i>%s</i>.' % (
