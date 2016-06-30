@@ -51,7 +51,7 @@ def sourcefmt(s):
 
 def get_local_link(match):
     name = match.group(1)
-    return '<a href="%s.html">%s</a>' % (name, name)
+    return '<a href="%s">%s</a>' % (name, name)
 
 def get_name(f):
     return os.path.basename(str(f)).rsplit('.', 1)[0]
@@ -63,6 +63,8 @@ def yaml_mako(suf):
         tmpl = Template(filename=str(makof))
         with open(str(yamlf)) as fil:
             d = yaml.load(fil)
+        assert 'source' not in d, yamlf
+        assert 'note' not in d, yamlf
         d['name'] = get_name(yamlf)
         sources = []
         if 'sources' in d:
@@ -126,7 +128,8 @@ for f in Glob('Src/*.svg') + Glob('Src/*.png'):
     else:
         Command(pngf, f, r'convert $SOURCE -resize 200x200\> $TARGET')
         Command(bigpngf, f, r'convert $SOURCE -resize 500x500\> $TARGET')
-    Install('gh-pages/Mon/', f)
+    Command('gh-pages/Mon/%s.%s' % (stem, suf), [f],
+            Copy('$TARGET', '$SOURCE'))
     c = Command(htmlf, ['Src/html.mak', yamlf], yaml_mako(suf))
     Depends(c, 'SConstruct')
 

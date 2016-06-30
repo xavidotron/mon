@@ -1,4 +1,4 @@
 image: !include 'Mon:Teapot.image.png'
-note: '"One" and "great" teapot.'
+notes: '"One" and "great" teapot.'
 date: 1470<<KenmonShokamon 43/>>
-tags: '[[MP:Tools]]'
+tags: '[[MP:Tool]]'

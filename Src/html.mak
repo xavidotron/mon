@@ -1,6 +1,7 @@
+## -*- coding: utf-8 -*-
 <html>
 <head>
-<title>Mon Compendium: ${name}</title>
+<title>Japanese Heraldry Database: ${name}</title>
 <style type="text/css">
 th { vertical-align: top }
 </style>
@@ -16,5 +17,12 @@ th { vertical-align: top }
   %endif
 %endfor
 </table>
+
+<center style="margin: 5ex">
+Mon images are in the Public Domain. Other
+content <a href="https://creativecommons.org/publicdomain/zero/1.0/">hereby
+released into the Public Domain</a>.
+</center>
+
 </body>
 </html>
