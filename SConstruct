@@ -25,6 +25,16 @@ wiki_sources = {
     'Wikipedia': ('Wikipedia', 'https://en.wikipedia.org/wiki/'),
     'JaWikipedia': ('Japanese Wikipedia', 'https://ja.wikipedia.org/wiki/'),
 }
+scanned_sources = {
+    'Daibukan': (
+        u'Daibukan (大武鑑; “Great Book of Heraldry”)',
+        'http://dl.ndl.go.jp/info:ndljp/pid/1015270/%d?tocOpened=1&__lang=en',
+        u'Volume 1. Daikōsha (大洽社), 1937'),
+    'AshikagaBukan': (
+        u'Ashikagake Bukan (足利家武鑑; “House Ashikaga Book of Heraldry”)',
+        'http://archive.wul.waseda.ac.jp/kosho/bunko20/bunko20_00368/bunko20_00368_0007/bunko20_00368_0007_p%04d.jpg',
+        u'Kinkadō (金花堂), 1822')
+}
 
 def sourcefmt(s):
     assert s.startswith('<<') and s.endswith('/>>'), s
@@ -35,7 +45,12 @@ def sourcefmt(s):
         return u'“<a href="%s">%s</a>”. <i>%s</i>.' % (
             url, title, sname)
     source,rest = s.split(None, 1)
-    if source in wiki_sources:
+    if source in scanned_sources:
+        pg = int(rest)
+        title, url, endbit = scanned_sources[source]
+        return u'<i><a href="%s">%s</a></i>, %s. p. %d.' % (
+            url % (pg), title, endbit, pg)
+    elif source in wiki_sources:
         sname, prefix = wiki_sources[source]
         return u'“<a href="%s">%s</a>”. <i>%s</i>.' % (
             prefix + rest, rest, sname)
@@ -113,10 +128,10 @@ def yaml_mako(suf):
 
 LOCAL_LINK_RE = re.compile(r'\[\[Mon:([^\]|]+)\]\]')
 
-STEM_RE = re.compile(r'^Src/(.+?)(?:\.image)?\.(svg|png)$')
+STEM_RE = re.compile(r'^Src/(.+?)(?:\.image)?\.(svg|png|jpg)$')
 
 all_yaml = []
-for f in Glob('Src/*.svg') + Glob('Src/*.png'):
+for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
     m = STEM_RE.search(str(f))
     stem = m.group(1)
     suf = m.group(2)
