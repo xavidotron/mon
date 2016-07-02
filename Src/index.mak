@@ -59,11 +59,11 @@ lastprefix = 'zzz'
   %endfor
 %endfor
 
-<center style="margin: 5ex">
+<center style="margin: 5ex"><small>
 Mon images are in the Public Domain. Other
 content <a href="https://creativecommons.org/publicdomain/zero/1.0/">hereby
 released into the Public Domain</a>.
-</center>
+</small></center>
 
 </body>
 </html>

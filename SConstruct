@@ -44,7 +44,7 @@ def sourcefmt(s):
     if 'http://' in s or 'https://' in s:
         title, url, sname = s.split(', ')
         return u'“<a href="%s">%s</a>”. <i>%s</i>.' % (
-            url, title, sname)
+            url, title, sname.strip())
     source,rest = s.split(None, 1)
     if source in scanned_sources:
         pg = int(rest)
@@ -122,7 +122,7 @@ def yaml_mako(suf):
         d['sources'] = '<br />'.join(sources)
         d['categories'] = ', '.join('<a href="../#%s">%s</a>' % ((c,) * 2)
                                     for c in get_categories(d))
-        d['images'] = [(d['name'], suf, thumbsuf)]
+        d['images'] = [(d['name'], suf, thumbsuf_map[str(yamlf)])]
         rendered = tmpl.render(**d)
         assert '<<' not in rendered, d
         assert '[[' not in rendered, rendered.encode('utf-8')
