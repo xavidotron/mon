@@ -1,6 +1,7 @@
 transliteration: Agemaki musubi
 name: Agemaki Knot
-tags: '[[MT:Knot]], [[MP:Knot]]'
+categories:
+- Object: Knot
 image: !include 'Mon:Knot.image.svg'
 kanji: "\u7DCF\u89D2\u7D50\u3073"
 date: 1470<<KamonNoJiten 7/>>

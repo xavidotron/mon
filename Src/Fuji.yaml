@@ -1,4 +1,5 @@
 image: !include 'Mon:Fuji.image.png'
 date: 1644<<OUmajirushi 219/>>
 owner: Aoki Shigekane
-tags: '[[MP:Landscape]]'
+categories:
+- Landscape: Other

@@ -1,6 +1,7 @@
 transliteration: Natagama
 name: Natagama
-tags: '[[MT:Tool]], [[MP:Tool]]'
+categories:
+- Object: Tool
 image: !include 'Mon:Nata.image.svg'
 kanji: "\u9248\u938C"
 date: 1615<<SamuraiHeraldry 62/>>

@@ -1,6 +1,8 @@
 transliteration: "Hi no maru \u014Dgi<<IllEnc 54 2/>>"
 name: Tricolor Sun Fan
-tags: '[[MT:Fan]], [[MT:Star]], [[MP:Fan]], [[MP:Multicolor]]'
+categories:
+- Multicolor
+- Object: Fan (Folding)
 image: !include 'Mon:SunFan.image.svg'
 kanji: "\u65E5\u306E\u4E38\u6247<<IllEnc 54 2/>>"
 date: 1614<<SamuraiHeraldry 62/>>

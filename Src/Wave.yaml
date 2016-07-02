@@ -1,4 +1,5 @@
 image: !include 'Mon:Wave.image.png'
 date: 1556<<SamuraiHeraldry 57/>>
 owner: Saito Dosan
-tags: '[[MP:Landscape]], [[MP:Water]]'
+categories:
+- Landscape: Water
