@@ -5,5 +5,6 @@ transliteration: Hira-hitotsu-me
 blazon: Argent, a voided delf sable.
 image: !include FlatOneEye.image.svg
 imagesource: <<SamuraiHeraldry 5/>>
-tags: '[[MP:Geometric]]'
+categories:
+- Geometric: Square
 owner: Arima Toyouji

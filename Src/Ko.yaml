@@ -2,4 +2,6 @@ image: !include 'Mon:Ko.image.png'
 date: 1644
 sources: OUmajirushi 155
 owner: Koide Yoshichika
-categories: Character, Pierced Disc
+categories:
+- Character: Other
+- Enclosure: Pierced

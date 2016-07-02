@@ -1,7 +1,8 @@
 name: 16-petal Chrysanthemum
 transliteration: "Jy\u016Broku kiku"
 blazon: 'Guels, a sixteen-petaled chrysanthemum argent. '
-tags: '[[MT:Sixteen]], [[MT:Chrysanthemum]], [[MT:Restricted]], [[MP:Flower]]'
+categories:
+- Plant: Chrysanthemum
 image: !include 'Mon:SingleChrys.image.svg'
 kanji: |
   十六菊

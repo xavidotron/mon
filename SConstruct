@@ -18,6 +18,7 @@ source_map = {
     'KenmonShokamon': u'<i>Kenmon Shokamon (見聞諸家紋; “Various Observed Family Crests”)</i>. 1467–1470. <a href="http://dl.ndl.go.jp/info:ndljp/pid/2533035">http://dl.ndl.go.jp/info:ndljp/pid/2533035</a>.',
     'OUmajirushi': u'Xavid “Kihō” Pretzer. <i>O-umajirushi: A 17th-Century Compendium of Samurai Heraldry</i>. The Academy of the Four Directions. 2015.',
     'SamuraiSourcebook': 'Turnbull, Stephen. <i>The Samurai Sourcebook</i>. Cassell & Co, 2000.',
+    'Tadoru2': u'<i>Shoku Kamon de Tadoru Anata no Kakei (続家紋でたどるあなたの家系; “Your Family Lineage Followed with Family Crests, Continued”)</i>. Yagishoten (八木書店), 1998.', # https://books.google.com/books?id=F1VdUz1RUosC&dq=%22%E7%A5%9E%E5%AE%B6%22+%E7%89%A9%E9%83%A8&source=gbs_navlinks_s
 }
 wiki_sources = {
     'Commons': ('Wikimedia Commons',
@@ -83,8 +84,11 @@ def yaml_mako(suf):
         tmpl = Template(filename=str(makof))
         with open(str(yamlf)) as fil:
             d = yaml.load(fil)
-        assert 'source' not in d, yamlf
-        assert 'note' not in d, yamlf
+        for k in d:
+            assert k in ('sources', 'notes', 'date', 'tags', 'owner',
+                         'kanji', 'transliteration', 'name', 'blazon',
+                         'image', 'translation', 'imagesource', 'categories'), (
+                str(yamlf), k)
         d['name'] = get_name(yamlf)
         sources = []
         if 'sources' in d:
@@ -118,7 +122,7 @@ def yaml_mako(suf):
         d['sources'] = '<br />'.join(sources)
         d['categories'] = ', '.join('<a href="../#%s">%s</a>' % ((c,) * 2)
                                     for c in get_categories(d))
-        d['suffix'] = suf
+        d['images'] = [(d['name'], suf, thumbsuf)]
         rendered = tmpl.render(**d)
         assert '<<' not in rendered, d
         assert '[[' not in rendered, rendered.encode('utf-8')
@@ -131,14 +135,17 @@ LOCAL_LINK_RE = re.compile(r'\[\[Mon:([^\]|]+)\]\]')
 STEM_RE = re.compile(r'^Src/(.+?)(?:\.image)?\.(svg|png|jpg)$')
 
 all_yaml = []
+thumbsuf_map = {}
 for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
     m = STEM_RE.search(str(f))
     stem = m.group(1)
     suf = m.group(2)
-    pngf = 'gh-pages/Mon/' + stem + '-200.png'
-    bigpngf = 'gh-pages/Mon/' + stem + '-500.png'
+    thumbsuf = suf if suf != 'svg' else 'png'
+    pngf = 'gh-pages/Mon/' + stem + '-200.' + thumbsuf
+    bigpngf = 'gh-pages/Mon/' + stem + '-500.' + thumbsuf
     yamlf = 'Src/' + stem + '.yaml'
     all_yaml.append(yamlf)
+    thumbsuf_map[yamlf] = thumbsuf
     htmlf = 'gh-pages/Mon/' + stem + '.html'
     if suf == 'svg':
         c = Command(pngf, f, 'bin/svg_to_png $SOURCE $TARGET 200')
@@ -155,14 +162,22 @@ for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
 
 def get_categories(d):
     if 'categories' in d:
-        for c in d['categories'].split(', '):
-            yield c
+        cl = d['categories']
+        if not isinstance(cl, list):
+            cl = cl.split(', ')
+        for c in cl:
+            if isinstance(c, dict):
+                assert len(c) == 1
+                for k in c:
+                    yield '%s: %s' % (k, c[k])
+            else:
+                yield c.strip()
         return
     assert 'tags' in d, d
     tags = d['tags']
     for t in tags.split(', '):
         if t.startswith('[[MP:'):
-            yield re.sub(r'([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))',
+            yield re.sub(r'([a-z:](?=[A-Z])|[A-Z](?=[A-Z][a-z]))',
                               r'\1 ', t[5:-2])    
 
 def make_index(target, source, env):
@@ -183,7 +198,8 @@ def make_index(target, source, env):
                     date = int(CITE_RE.sub('', date))
             else:
                 date = 'Modern'
-            category_map[category].append((date, get_name(yamlf)))
+            category_map[category].append((date, get_name(yamlf),
+                                           thumbsuf_map[str(yamlf)]))
             found = True
         assert found, (str(yamlf), d['tags'])
     for c in category_map:

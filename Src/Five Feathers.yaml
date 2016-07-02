@@ -1,6 +1,8 @@
 transliteration: Itsutsu narabi taka no ha
 name: Five Feathers
-tags: '[[MT:Feather]], [[MT:Five]], [[MP:Feather]], [[MP:InFess]]'
+categories:
+- Feather
+- Arrangement: In Fess
 image: !include 'Mon:FiveFeathers.image.svg'
 kanji: "\u4E94\u3064\u4E26\u3073\u9DF9\u306E\u7FBD<<IllEnc 218 20/>>"
 date: 1470<<KamonNoJiten 7/>>

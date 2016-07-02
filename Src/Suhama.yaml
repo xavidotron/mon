@@ -1,4 +1,7 @@
 image: !include 'Mon:Suhama.image.png'
 date: 1470<<KenmonShokamon 48/>>
-tags: '[[MP:Landscape]]'
-notes: A stylized beach or inlet.
+categories:
+- Landscape
+- Geometric: Other
+- Arrangement: Other
+notes: A suhama is a stylized beach or inlet.

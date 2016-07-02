@@ -9,8 +9,10 @@ th { vertical-align: top }
 <body>
 <a href="..">&lt;&lt;</a>
 <h1>${name}</h1>
+%for iname,suffix,thumbsuf in images:
+<a href="${iname}.${suffix}"><img src="${iname}-500.${thumbsuf}" /></a>
+%endfor
 <table>
-<a href="${name}.${suffix}"><img src="${name}-500.png" /></a>
 %for k in ['kanji', 'transliteration', 'translation', 'date', 'owner', 'blazon', 'categories', 'notes', 'sources']:
   %if k in context.keys():
     <tr><th>${k.capitalize()}</th><td>${context[k]}</td></tr>

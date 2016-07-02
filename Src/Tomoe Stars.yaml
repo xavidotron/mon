@@ -1,4 +1,6 @@
 image: !include 'Mon:TomoeStars.image.png'
 date: 1644<<OUmajirushi 142/>>
 owner: Oda Takanaga
-tags: '[[MP:Tomoe]]'
+categories:
+- Religious: Tomoe
+- Arrangement: Stars-like

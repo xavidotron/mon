@@ -2,4 +2,5 @@ image: !include 'Mon:RiceBowl.image.png'
 owner: Honda Toshimasa or Honda Masatake
 date: 1637
 sources: OUmajirushi 97
-tags: '[[MP:Geometric]]'
+categories:
+- Geometric: Circle

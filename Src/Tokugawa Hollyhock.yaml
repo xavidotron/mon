@@ -1,6 +1,9 @@
 transliteration: Maru ni mitsu aoi
 name: Tokugawa Hollyhock
-tags: '[[MT:Hollyhock]], [[MT:Three]], [[MT:Circle]], [[MP:InAnnulo]], [[MP:Leaf]], [[MP:Circle]]'
+categories:
+- Enclosure: Ring
+- Plant: Hollyhock
+- Arrangement: Emerging
 image: !include 'Mon:TokugawaHollyhock.image.svg'
 kanji: "\u4E38\u306B\u4E09\u3064\u8475<<IllEnc 6/>>"
 date: 1567<<Wikipedia Tokugawa clan/>>

@@ -1,6 +1,9 @@
 transliteration: Kage uchiwa sasa ni ichi no ji
 name: Fan with Bamboo
-tags: '[[MT:Bamboo]], [[MT:Fan]], [[MT:One]], [[MP:Fan]], [[MP:Character]], [[MP:Plant]]'
+categories:
+- Plant: Bamboo
+- Fan
+- Character: Number
 image: !include 'Mon:RuralFanBamboo.image.svg'
 kanji: "\u301C\u9670\u56E3\u6247\u7B39\u306B\u4E00\u306E\u5B57"
 date: 1470<<KamonNoJiten 7/>>

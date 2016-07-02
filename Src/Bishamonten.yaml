@@ -2,4 +2,6 @@ image: !include 'Mon:Bishamonten.image.png'
 notes: The first character of Bishamon-ten, Guardian of the North.
 date: 1578
 sources: SamuraiHeraldry 25
-categories: Other Religious
+categories:
+- Character: Other
+- Religious: Other

@@ -2,4 +2,5 @@ image: !include 'Mon:Chestnut.image.png'
 owner: Ogasawara Tadatomo
 sources: OUmajirushi 81
 date: 1644
-categories: Rhombus
+categories:
+- Geometric: Rhombus

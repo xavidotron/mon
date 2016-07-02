@@ -1,6 +1,7 @@
 transliteration: Hachi-dan banshigo
 name: Eight-rung Ladder
-tags: '[[MT:Ladder]], [[MP:Ladder]]'
+categories:
+- Tool
 image: !include 'Mon:TallLadder.image.svg'
 kanji: "\u516B\u6BB5\u68AF\u5B50"
 date: 1638

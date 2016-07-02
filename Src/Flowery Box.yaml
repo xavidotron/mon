@@ -1,6 +1,7 @@
 name: Flowery Box
-tags: '[[MT:Flower]], [[MP:Flower]], [[MP:Enclosure]]'
-image: !include 'Mon:ProvincialMystery2.image.svg'
+categories:
+- Plant: Other Flower
+- Enclosure: Other
 date: 1470<<KamonNoJiten 7/>>
 translation:
 imagesource: <<KamonNoJiten 7/>>

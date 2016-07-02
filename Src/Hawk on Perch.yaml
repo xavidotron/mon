@@ -1,5 +1,6 @@
 name: Hawk on Perch
-tags: '[[MT:Hawk]], [[MP:Bird]]'
+categories: |
+  Animal: Bird
 image: !include 'Mon:HawkOnPerch.image.svg'
 date: 1470<<KamonNoJiten 7/>>
 translation:

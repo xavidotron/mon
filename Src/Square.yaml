@@ -1,4 +1,5 @@
 image: !include 'Mon:NailPuller.image.png'
 date: 1639<<OUmajirushi 95/>>
 owner: Hori Naoyori
-tags: '[[MP:Geometric]]'
+categories:
+- Geometric: Square

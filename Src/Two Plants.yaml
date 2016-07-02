@@ -2,4 +2,6 @@ image: !include 'Mon:TwoPlants.image.png'
 date: 1473<<SamuraiSourcebook 73.14/>>
 owner: Yamana Mochitoyo
 notes: A paulownia above two gentian-like plants.
-categories: Plant, Paulownia
+categories:
+- Plant: Paulownia
+- Plant: Other Leaf

@@ -1,6 +1,7 @@
 transliteration: Kawari hana-tsuki futaba aoi
 name: Hollyhock with Flower
-tags: '[[MT:Hollyhock]], [[MT:Two]], [[MP:Flower]]'
+categories:
+- Plant: Hollyhock
 image: !include 'Mon:HollyhockWithFlower.image.svg'
 kanji: "\u5909\u308F\u308A\u82B1\u4ED8\u304D\u4E8C\u8449\u8475"
 translation: Different two leaf hollyhock with flower attached

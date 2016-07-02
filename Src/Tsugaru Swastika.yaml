@@ -1,6 +1,7 @@
 transliteration: Manji<<IllEnc 360 11/>>
 name: Tsugaru Swastika
-tags: '[[MT:Swastika]], [[MP:Swastika]]'
+categories:
+- Religious: Swastika
 image: !include 'Mon:TsugaruSwastika.image.svg'
 kanji: "\u4E07\u5B57<<IllEnc 360 11/>>"
 date: 1610

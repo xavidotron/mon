@@ -1,4 +1,7 @@
 image: !include 'Mon:ArrowsAndPine.image.png'
 date: 1470
 sources: KenmonShokamon 28
-categories: Feather, Plant, In Fess
+categories:
+- Feather
+- Plant: Tree
+- Arrangement: In Fess

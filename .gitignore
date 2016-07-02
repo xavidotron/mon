@@ -3,3 +3,5 @@
 /.sconsign.dblite
 /Out/
 .DS_Store
+/pending.py
+/respec.py

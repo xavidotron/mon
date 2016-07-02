@@ -1,4 +1,5 @@
 image: !include 'Mon:WoodSorrel.image.png'
 date: 1636<<OUmajirushi 33/>>
-categories: Leaf
+categories:
+- Plant: Wood Sorrel
 owner: Sakai Tadayo

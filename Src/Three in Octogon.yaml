@@ -1,6 +1,8 @@
 transliteration: Sumi-kiri kaku ni san no ji
 name: Three in Octogon
-tags: '[[MT:Three]], [[MT:Octagon]], [[MT:Character]], [[MP:Enclosure]], [[MP:Character]]'
+categories:
+- Character: Number
+- Enclosure: Other
 image: !include 'Mon:OctagonThree.image.svg'
 kanji: "\u9685\u5207\u308A\u89D2\u306B\u4E09\u306E\u5B57"
 date: 1570<<SamuraiHeraldry 54 />>

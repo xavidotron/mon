@@ -1,4 +1,6 @@
 image: !include 'Mon:LeavesInRing.image.png'
 date: 1644<<OUmajirushi 144/>>
-tags: '[[MP:Leaf]], [[MP:Enclosure]]'
+categories:
+- Plant: Hollyhock
+- Enclosure: Ring
 owner: Honda Toshitsugu

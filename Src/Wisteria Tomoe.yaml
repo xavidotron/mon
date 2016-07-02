@@ -1,4 +1,6 @@
 image: !include 'Mon:WisteriaTomoe.image.png'
 date: 1604<<OUmajirushi 83/>>
-categories: Tomoe, Wisteria
+categories:
+- Religious: Tomoe
+- Plant: Wisteria
 owner: Kuroda Yoshitaka

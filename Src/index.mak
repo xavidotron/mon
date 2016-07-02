@@ -4,6 +4,7 @@
 <title>Japanese Heraldry Database</title>
 <style type="text/css">
 div {
+  vertical-align: top;
   text-align: center;
   display: inline-block;
   width: 200px;
@@ -24,18 +25,37 @@ span {
 focusing on early Edo and pre-Edo Japan.  See
 also <a href="http://fireflies.xavid.us/">Fireflies Sing</a>, my more general Feudal Japan blog.</a>
 
+<%
+def get_key(c):
+   return c.replace('Other ', 'ZZY ').replace('Other', 'ZZZ')
+lastprefix = 'zzz'
+%>
+
+<h2>Contents</h2>
+<ul>
+%for c in sorted(category_map, key=get_key):
+  %if c.startswith(lastprefix):
+, <a href="#${c}">${c.split(': ', 1)[1]}</a>\
+  %else:
+    %if ': ' in c:
+      <% lastprefix = c.split(': ', 1)[0] + ': ' %>
+      <li><a href="#${c}">${c.split(': ', 1)[0]}</a>:
+      <a href="#${c}">${c.split(': ', 1)[1]}</a>\
+    %else:
+      <% lastprefix = 'zzz' %>
+      <li><a href="#${c}">${c}</a>
+    %endif
+  %endif
+%endfor
+</ul>
+
 <h2>By Category</h2>
 
-<p>Jump To:
-%for c in sorted(category_map):
-<a href="#${c}">${c}</a>
-%endfor
-
-%for c in sorted(category_map):
+%for c in sorted(category_map, key=get_key):
   <h3 id="${c}">${c}</h3>
 
-  %for year, name in category_map[c]:
-    <div><a href="Mon/${name}"><span><img src="Mon/${name}-200.png" /></span><br />${name} (${year})</a></div>
+  %for year, name, thumbsuf in category_map[c]:
+    <div><a href="Mon/${name}"><span><img src="Mon/${name}-200.${thumbsuf}" /></span><br />${name} (${year})</a></div>
   %endfor
 %endfor
 

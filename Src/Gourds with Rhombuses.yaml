@@ -1,5 +1,8 @@
 transliteration: Futatsu hisago ni futatsu matsukawa bishi
-tags: '[[MT:Rhombus]], [[MT:Two]], [[MT:Pine]], [[MT:Gourd]], [[MP:Enclosure]], [[MP:Rhombus]]'
+categories:
+- Geometric: Rhombus
+- Plant: Gourd
+- Enclosure: Other
 image: !include 'Mon:ChestnutGourd.image.svg'
 kanji: "\u4E8C\u3064\u74E2\u306B\u4E8C\u3064\u677E\u76AE\u83F1"
 date: 1470<<KamonNoJiten 7/>>

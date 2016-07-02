@@ -1,4 +1,5 @@
 image: !include 'EarlyStone.image.png'
 date: 1470
 sources: KenmonShokamon 32
-categories: Geometric
+categories:
+- Geometric: Square

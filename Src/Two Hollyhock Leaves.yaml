@@ -1,6 +1,7 @@
 transliteration: Kage me-tsuki futaba aoi
 name: Two Hollyhock Leaves
-tags: '[[MT:Hollyhock]], [[MT:Two]], [[MT:Bud]], [[MP:Leaf]]'
+categories:
+- Plant: Hollyhock
 image: !include 'Mon:RuralHollyhock.image.svg'
 kanji: "\u301C\u9670\u82BD\u4ED8\u304D\u4E8C\u8449\u8475"
 date: 1470<<KamonNoJiten 7/>>
