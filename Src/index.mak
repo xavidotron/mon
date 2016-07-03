@@ -27,7 +27,10 @@ also <a href="http://fireflies.xavid.us/">Fireflies Sing</a>, my more general Fe
 
 <%
 def get_key(c):
-   return c.replace('Other ', 'ZZY ').replace('Other', 'ZZZ')
+   return (c.replace('Other ', 'ZZY ').replace('Other', 'ZZZ')
+            .replace('One', '1').replace('Two', '2').replace('Three', '3')
+	    .replace('Single', '1')
+	   )
 lastprefix = 'zzz'
 %>
 
