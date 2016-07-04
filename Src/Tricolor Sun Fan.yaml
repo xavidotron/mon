@@ -3,7 +3,7 @@ name: Tricolor Sun Fan
 categories:
 - Multicolor
 - Object: Fan (Folding)
-- Geometric: Circle
+- Geometric: Circle (Single Plain)
 image: !include 'Mon:SunFan.image.svg'
 kanji: "\u65E5\u306E\u4E38\u6247<<IllEnc 54 2/>>"
 date: 1614<<SamuraiHeraldry 62/>>
