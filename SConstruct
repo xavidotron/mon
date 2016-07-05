@@ -19,6 +19,7 @@ source_map = {
     'OUmajirushi': u'Xavid “Kihō” Pretzer. <i>O-umajirushi: A 17th-Century Compendium of Samurai Heraldry</i>. The Academy of the Four Directions. 2015.',
     'SamuraiSourcebook': 'Turnbull, Stephen. <i>The Samurai Sourcebook</i>. Cassell & Co, 2000.',
     'Tadoru2': u'<i>Shoku Kamon de Tadoru Anata no Kakei (続家紋でたどるあなたの家系; “Your Family Lineage Followed with Family Crests, Continued”)</i>. Yagishoten (八木書店), 1998.', # https://books.google.com/books?id=F1VdUz1RUosC&dq=%22%E7%A5%9E%E5%AE%B6%22+%E7%89%A9%E9%83%A8&source=gbs_navlinks_s
+    'NNK2': u'Tsujiai Kiyotarō (辻合喜代太郎). <i>Shoku Nihon no Kamon (続日本の家紋; “Family Crests of Japan, Continued”)</i>. Hoikusha (保育社), 1975.', # https://books.google.com/books?id=64Tw_yLYlXwC&pg=PA97&lpg=PA97&dq=%E5%B1%B1%E5%BD%A2%E6%9D%91%E7%B4%BA&source=bl&ots=LdkniCZ-ou&sig=AWwyJAbxPD0QjJqIP1isP4m6StY&hl=en&sa=X&ved=0ahUKEwi4iePdztzNAhWLND4KHeG8DzkQ6AEIHDAA#v=onepage&q=%E5%B1%B1%E5%BD%A2%E6%9D%91%E7%B4%BA&f=false
 }
 wiki_sources = {
     'Commons': ('Wikimedia Commons',
