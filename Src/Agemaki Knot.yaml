@@ -2,11 +2,10 @@ transliteration: Agemaki musubi
 name: Agemaki Knot
 categories:
 - Object: Knot
-image: !include 'Mon:Knot.image.svg'
 kanji: "\u7DCF\u89D2\u7D50\u3073"
-date: 1470<<KamonNoJiten 7/>>
+date: 1470
 translation: Agemaki (all angles) knot
-imagesource: <<KamonNoJiten 7/>>
-notes: 'Used by a provincial samurai.<<KamonNoJiten 7/>>  See also [[http://fireflies.xavid.us/2010/11/28/mon-of-the-week-knot/|Mon
-  of the Week: Knot]] on [[http://fireflies.xavid.us/|Fireflies Sing]].'
-owner: a provincial samurai
+sources: KenmonShokamon 18
+notes: |
+  See also [[http://fireflies.xavid.us/2010/11/28/mon-of-the-week-knot/|Mon
+  of the Week: Knot]] on [[http://fireflies.xavid.us/|Fireflies Sing]].

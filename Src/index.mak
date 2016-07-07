@@ -32,6 +32,7 @@ def get_key(c):
 	    .replace('Single', '1')
 	   )
 lastprefix = 'zzz'
+implicit_set = set()
 %>
 
 <h2>Contents</h2>
@@ -55,10 +56,22 @@ lastprefix = 'zzz'
 <h2>By Category</h2>
 
 %for c in sorted(category_map, key=get_key):
+  %if ' (' in c and c.split(' (', 1)[0] not in implicit_set:
+  <% implicit_set.add(c.split(' (', 1)[0]) %>
+  <a id="${c.split(' (', 1)[0]}"></a>
+  %endif
   <h3 id="${c}">${c}</h3>
 
-  %for year, name, thumbsuf in category_map[c]:
-    <div><a href="Mon/${name}"><span><img src="Mon/${name}-200.${thumbsuf}" /></span><br />${name} (${year})</a></div>
+  %if c in seealso_map:
+    <p>See also: ${', '.join('<a href="#%s">%s</a>' % (sac, sac) for sac in seealso_map[c])}</p>
+  %endif
+
+  %for year, name, thumbsuf, cnt in category_map[c]:
+    <div><a href="Mon/${name}"><span><img src="Mon/${name}-200.${thumbsuf}" /></span><br />${name} (${year})
+    %if cnt > 1:
+      (x${cnt})
+    %endif
+    </a></div>
   %endfor
 %endfor
 

@@ -1,11 +1,10 @@
-transliteration: '? ni karigane'
-name: Enclosed Goose
-categories: |
-  Animal: Bird, Enclosure: Other
-kanji: "\uFF1F\u306B雁金"
-date: 1470<<KamonNoJiten 7/>>
-translation: In ?, a wild goose
-imagesource: <<KamonNoJiten 7/>>
-notes: 'Used by a provincial samurai.<<KamonNoJiten 7/>>  See also [[http://fireflies.xavid.us/2010/10/25/mon-of-the-week-plover/|Mon
+transliteration: 'Kako ni Karigane'
+categories:
+- Animal: Bird (Goose)
+- Enclosure: Tongs
+kanji: "鋏具に雁金<<Kako ni Karigane (鋏具に雁金), http://kamon-db.net/portfolio/kakonikarigane, Kamon DB (家紋DB)/>>"
+date: 1470
+translation: In tongs, a wild goose
+sources: KenmonShokamon 17
+notes: 'See also [[http://fireflies.xavid.us/2010/10/25/mon-of-the-week-plover/|Mon
   of the Week: Enclosed Goose]] at [[http://fireflies.xavid.us|Fireflies Sing]].'
-owner: a provincial samurai

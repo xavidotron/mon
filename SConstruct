@@ -61,6 +61,7 @@ def sourcefmt(s):
     parts = rest.split()
     if len(parts) == 2:
         page, num = parts
+        assert not page.endswith(','), parts
         numbit = ' fig. ' + num
     else:
         assert len(parts) == 1, parts
@@ -79,7 +80,7 @@ def get_name(f):
     return os.path.basename(str(f)).rsplit('.', 1)[0]
 
 CITE_RE = re.compile(r'<<[^>]+>>')
-def yaml_mako(suf):
+def yaml_mako(images):
     def yaml_mako_impl(target, source, env):
         makof, yamlf = source
         tmpl = Template(filename=str(makof))
@@ -123,7 +124,7 @@ def yaml_mako(suf):
         d['sources'] = '<br />'.join(sources)
         d['categories'] = ', '.join('<a href="../#%s">%s</a>' % ((c,) * 2)
                                     for c in get_categories(d))
-        d['images'] = [(d['name'], suf, thumbsuf_map[str(yamlf)])]
+        d['images'] = images
         rendered = tmpl.render(**d)
         assert '<<' not in rendered, d
         assert '[[' not in rendered, rendered.encode('utf-8')
@@ -137,6 +138,7 @@ STEM_RE = re.compile(r'^Src/(.+?)(?:\.image)?\.(svg|png|jpg)$')
 
 all_yaml = []
 thumbsuf_map = {}
+image_map = {}
 for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
     m = STEM_RE.search(str(f))
     stem = m.group(1)
@@ -144,10 +146,6 @@ for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
     thumbsuf = suf if suf != 'svg' else 'png'
     pngf = 'gh-pages/Mon/' + stem + '-200.' + thumbsuf
     bigpngf = 'gh-pages/Mon/' + stem + '-500.' + thumbsuf
-    yamlf = 'Src/' + stem + '.yaml'
-    all_yaml.append(yamlf)
-    thumbsuf_map[yamlf] = thumbsuf
-    htmlf = 'gh-pages/Mon/' + stem + '.html'
     if suf == 'svg':
         c = Command(pngf, f, 'bin/svg_to_png $SOURCE $TARGET 200')
         Depends(c, 'bin/svg_to_png')
@@ -158,8 +156,30 @@ for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
         Command(bigpngf, f, r'convert $SOURCE -resize 500x500\> $TARGET')
     Command('gh-pages/Mon/%s.%s' % (stem, suf), [f],
             Copy('$TARGET', '$SOURCE'))
-    c = Command(htmlf, ['Src/html.mak', yamlf], yaml_mako(suf))
+    if stem[-1].isdigit():
+        yamlf = 'Src/' + stem[:-1] + '.yaml'
+        image_map[yamlf].append((stem, suf, thumbsuf))
+    else:
+        yamlf = 'Src/' + stem + '.yaml'
+        all_yaml.append(yamlf)
+        thumbsuf_map[yamlf] = thumbsuf
+        assert yamlf not in image_map
+        image_map[yamlf] = [(stem, suf, thumbsuf)]
+
+for yamlf in all_yaml:
+    images = image_map[yamlf]
+    stem = yamlf[len('Src/'):-len('.yaml')]
+    htmlf = 'gh-pages/Mon/' + stem + '.html'
+    c = Command(htmlf, ['Src/html.mak', yamlf], yaml_mako(images))
     Depends(c, 'SConstruct')
+
+def deyaml_category(c):
+    if isinstance(c, dict):
+        assert len(c) == 1
+        for k in c:
+            return '%s: %s' % (k, c[k])
+    else:
+        return c.strip()
 
 def get_categories(d):
     if 'categories' in d:
@@ -167,12 +187,7 @@ def get_categories(d):
         if not isinstance(cl, list):
             cl = cl.split(', ')
         for c in cl:
-            if isinstance(c, dict):
-                assert len(c) == 1
-                for k in c:
-                    yield '%s: %s' % (k, c[k])
-            else:
-                yield c.strip()
+            yield deyaml_category(c)
         return
     assert 'tags' in d, d
     tags = d['tags']
@@ -181,32 +196,43 @@ def get_categories(d):
             yield re.sub(r'([a-z:](?=[A-Z])|[A-Z](?=[A-Z][a-z]))',
                               r'\1 ', t[5:-2])    
 
-def make_index(target, source, env):
-    makof = source[0]
-    yamlfs = source[1:]
-    tmpl = Template(filename=str(makof))
-    category_map = {}
-    for yamlf in yamlfs:
-        with open(str(yamlf)) as fil:
-            d = yaml.load(fil)
-        found = False
-        for category in get_categories(d):
-            if category not in category_map:
-                category_map[category] = []
-            if 'date' in d:
-                date = d['date']
-                if isinstance(date, basestring) and date != 'Modern':
-                    date = int(CITE_RE.sub('', date))
-            else:
-                date = 'Modern'
-            category_map[category].append((date, get_name(yamlf),
-                                           thumbsuf_map[str(yamlf)]))
-            found = True
-        assert found, (str(yamlf), d['tags'])
-    for c in category_map:
-        category_map[c].sort()
-    rendered = tmpl.render(category_map=category_map)
-    with open(str(target[0]), 'w') as ofil:
-        ofil.write(rendered.encode('utf-8'))
+def make_index(yamlfs, categoryfs):
+    def make_index_impl(target, source, env):
+        makof = source[0]
+        tmpl = Template(filename=str(makof))
+        category_map = {}
+        for yamlf in yamlfs:
+            with open(str(yamlf)) as fil:
+                d = yaml.load(fil)
+            found = False
+            for category in get_categories(d):
+                if category not in category_map:
+                    category_map[category] = []
+                if 'date' in d:
+                    date = d['date']
+                    if isinstance(date, basestring) and date != 'Modern':
+                        date = int(CITE_RE.sub('', date))
+                else:
+                    date = 'Modern'
+                category_map[category].append((date, get_name(yamlf),
+                                               thumbsuf_map[str(yamlf)],
+                                               len(image_map[str(yamlf)])))
+                found = True
+            assert found, (str(yamlf), d['tags'])
+        for c in category_map:
+            category_map[c].sort()
+        seealso_map = {}
+        for catf in categoryfs:
+            with open(str(catf)) as fil:
+                d = yaml.load(fil)
+            cat = str(catf).split('/', 1)[1].split('.', 1)[0]
+            seealso_map[cat] = [deyaml_category(c) for c in d['seealso']]
+        rendered = tmpl.render(category_map=category_map,
+                               seealso_map=seealso_map)
+        with open(str(target[0]), 'w') as ofil:
+            ofil.write(rendered.encode('utf-8'))
+    return make_index_impl
 
-Command('gh-pages/index.html', ['Src/index.mak'] + all_yaml, make_index)
+Command('gh-pages/index.html',
+        ['Src/index.mak'] + all_yaml + Glob('Categories/*.yaml'),
+        make_index(all_yaml, Glob('Categories/*.yaml')))
