@@ -2,12 +2,12 @@ transliteration: Kage kane ni hisa no ji
 name: Long Time Bell
 categories:
 - Character: Auspicious
-- Enclosure: Other
+- Enclosure: Bell
 image: !include 'Mon:LongTimeBell.image.svg'
 kanji: "\u9670\u9418\u306B\u4E45\u306E\u5B57"
-date: 1470<<KamonNoJiten 7/>>
+date: 1470
 translation: Shadowed, in a bell the character "long time"
-imagesource: <<KamonNoJiten 7/>>
-notes: 'Used by a provincial samurai.<<KamonNoJiten 7/>>  See also [[http://fireflies.xavid.us/2010/08/24/mon-of-the-week-bell/|Mon
-  of the Week: Bell]] in [[http://fireflies.xavid.us/|Fireflies Sing]].'
-owner: a provincial samurai
+sources: KenmonShokamon 20
+notes: |
+  See also [[http://fireflies.xavid.us/2010/08/24/mon-of-the-week-bell/|Mon
+  of the Week: Bell]] in [[http://fireflies.xavid.us/|Fireflies Sing]].
