@@ -2,8 +2,8 @@ image: !include 'Mon:Eyes.image.png'
 date: 1644<<OUmajirushi 86/>>
 owner: Kyōgoku Takakazu
 categories:
-- Geometric: Square
-- Arrangement: Other
+- Geometric: Square (Shadowed)
+- Arrangement: Grid
 kanji: 七つ割平四つ目<<IllEnc 368/>>
 transliteration: Nanatsu-wari Hira Yotsu Me
 translation: Seven-Proportion Flat, Four Eyes

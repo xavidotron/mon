@@ -189,7 +189,10 @@ def get_categories(d):
         for c in cl:
             yield deyaml_category(c)
         return
-    assert 'tags' in d, d
+    #assert 'tags' in d, d
+    if 'tags' not in d:
+        yield 'Uncategorized'
+        return
     tags = d['tags']
     for t in tags.split(', '):
         if t.startswith('[[MP:'):
