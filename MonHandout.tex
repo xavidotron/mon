@@ -1,9 +1,13 @@
 \documentclass{article}
 
+\usepackage{calc}
+\usepackage{multicol}
 \usepackage{fontspec}
 \usepackage{xunicode}
 \defaultfontfeatures{Scale = MatchLowercase, Ligatures=TeX}
 \setmainfont{Hiragino Mincho Pro}
+
+\usepackage{enumitem}
 
 \usepackage{graphicx}
 \usepackage[space]{grffile}
@@ -13,27 +17,19 @@
 \usepackage{ifthenx}
 \usepackage[implicit=false]{hyperref}
 
-\let\origitemize=\itemize
-\def\itemize{%
-  \origitemize
-  \setlength{\itemsep}{0pt}%
-}
-\let\origdescription=\description
-\def\description{%
-  \origdescription
-  \setlength{\itemsep}{0pt}%
-}
+\setlist{noitemsep}
 
-\usepackage{tabulary}
+\usepackage{tabularx}
 
-\tymax=1.25in
+%\tymax=1.25in
 
 \makeatletter
 \def\sflabel#1{%
   \immediate\write\@auxout{\noexpand\newlabel{#1}{{\arabic{fig}\alph{sf}}{}{}{}{}}}}
 \makeatother
 
-%\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{w}[1]{@{}>{\centering\arraybackslash}m{#1}@{}}
 \newcounter{sf}
 \newcounter{fig}
 \setcounter{fig}{0}
@@ -46,13 +42,14 @@
 }{%
   \begin{center}
   \def\tableness##1{%
-    \begin{tabulary}{\textwidth}{##1}
+    \begin{tabular}{##1}
     \imgs \\
     \capts
-    \end{tabulary}}%
+    \end{tabular}}%
   \expandafter\tableness\expandafter{\colness}%
   \end{center}
 }
+\newlength\imgwid
 \newcommand\jpgfigure[4][75]{%
   \subfigureimpl[#1]{#2}{jpg}{#3}{#4}}
 \newcommand\subfigure[4][75]{%
@@ -62,14 +59,15 @@
   \def\tmp{#4}%
   \ifx\tmp\empty\else
     \sflabel{#4}%
-  \fi
+  \fi%,width=#1pt,keepaspectratio
+  \settowidth\imgwid{~\includegraphics[height=#1pt]{gh-pages/Mon/#2-500.#3}~}
   \ifx\colness\empty
-    \def\colness{C}%
-    \def\imgs{\includegraphics[height=#1pt,width=#1pt,keepaspectratio]{gh-pages/Mon/#2-500.#3}}%
+    \edef\colness{w{\the\imgwid}}%
+    \def\imgs{\includegraphics[height=#1pt]{gh-pages/Mon/#2-500.#3}}%
     \edef\capts{\noexpand\small (\arabic{fig}\alph{sf}) \unexpanded{#5}}%
   \else
-    \edef\colness{\colness C}%
-    \edef\imgs{\expandafter\unexpanded\expandafter{\imgs} \unexpanded{& \includegraphics[height=#1pt,width=#1pt,keepaspectratio]{gh-pages/Mon/#2-500.#3}}}%
+    \edef\colness{\colness w{\the\imgwid}}%
+    \edef\imgs{\expandafter\unexpanded\expandafter{\imgs} \unexpanded{& \includegraphics[height=#1pt]{gh-pages/Mon/#2-500.#3}}}%
     \edef\capts{\expandafter\unexpanded\expandafter{\capts} \unexpanded{& \small }(\arabic{fig}\alph{sf}) \unexpanded{#5}}%
   \fi
 }
@@ -119,6 +117,7 @@
   \xdef\cited{\expandafter\unexpanded\expandafter{\cited}\noexpand\item[#2] \unexpanded{#3}}%
 }
 
+\newsource{\sAshikagaBukan}{AB}{Ashikagake Bukan (足利家武鑑; “House Ashikaga Book of Heraldry”). \url{http://archive.wul.waseda.ac.jp/kosho/bunko20/bunko20_00368/bunko20_00368_0007/bunko20_00368_0007.html}}
 \newsource{\sDowerCrests}{Dower}{John W. Dower. \emph{The Elements of Japanese Design: A Handbook of Family Crests, Heraldry \& Symbolism}. Shambhala Publications, 1990.}
 \newsource{\sEncyclopediaOfShinto}{EoS}{\emph{Encyclopedia of Shinto}. \url{http://k-amc.kokugakuin.ac.jp/DM/dbTop.do?class_name=col_eos}}
 \newsource{\sFCoJ}{FCoJ}{\emph{Family Crests of Japan}. Stone Bridge Press, 2007.}
@@ -126,6 +125,8 @@
 \newsource{\sKamonNoJiten}{KnJ}{Takasawa Hitoshi (高澤等). \emph{Kamon no Jiten} (家紋の事典; ``Family Crest Encyclopedia''). T\=oky\=o-d\=o Shuppan, 2008.}
 \newsource{\sOUmajirushi}{OU}{\emph{O-umajirushi} (御馬印; ``Honorable Battle Standards''). National Diet Library, japan, 1624--1644. \url{http://dl.ndl.go.jp/info:ndljp/pid/1288484?__lang=en}}
 \newsource{\sTurningPoint}{Oribe}{Miyeko Murase, Ed. \emph{Turning Point: Oribe and the Arts of Sixteenth-Century Japan}. The Metropolitan Museum of Art, New York, 2003.}
+\newsource{\sRijks}{R:N}{``Arrival of a Portuguese ship''. Rijksmuseum. \url{https://www.rijksmuseum.nl/en/collection/AK-RAK-1968-1-B}}
+\newsource{\sRijksB}{R:B}{``Japans lakkistje''. Rijksmuseum. \url{https://www.rijksmuseum.nl/en/collection/NG-KOG-F6-5A,4}}
 \newsource{\sSamuraiHeraldry}{SH}{Stephen Turnbull. \emph{Samurai Heraldry}. Osprey Publishing, 2002.}
 \newsource{\sSamuraiSourcebook}{SS}{Stephen Turnbull. \emph{The Samurai Sourcebook}. Cassel \& Co, 2000.}
 
@@ -138,7 +139,7 @@
 
   Japan developed a system of identifying symbols or crests that is
   frequently compared to European heraldry.  These \textbf{crests are called
-  'mon' (紋) or 'monshō' (紋章)}. While there are some
+  `mon' (紋) or `monshō' (紋章)}. While there are some
   similarities to European devices, and both systems were used for
   similar identification purposes, the Japanese system has different
   basic principles and a different aesthetic.
@@ -147,7 +148,7 @@
   of mon used a single color on a solid background.  In addition, the way
   different graphical elements were combined was limited; many mon
   were constructed of only one type of element, and those that
-  combined multiple different types of 'charge' did so in standardized
+  combined multiple different types of `charge' did so in standardized
   ways, such as adding an enclosure around another element.
 
   What were mon used for?  \textbf{Primarily, they were used for
@@ -156,7 +157,7 @@
   designs on kimono, armor, camp curtains, roof tiles, carriages, and
   personal items.
 
-  \textbf{The most common type of mon is the 'kamon' (家紋), or
+  \textbf{The most common type of mon is the `kamon' (家紋), or
   ``family crest".}
   Kamon were used to identify family/clan membership or affiliation.
   However, there was never a one-to-one relationship between mon and
@@ -170,7 +171,7 @@
   The use of mon was
   not restricted to families: non-family groups, such as temples and
   shrines, could also use mon.
-  \textbf{Crests used by Shintō shrines are generally called 'shinmon'
+  \textbf{Crests used by Shintō shrines are generally called `shinmon'
   (神紋), ``divine crests".}  Crests for shrines
   became increasingly popular
   during the \KamakuraPeriod.  Shrine crests were generally similar to
@@ -189,14 +190,14 @@
   The earliest known use of mon was not on banners, but on Imperial ox
   carts going back as far back as the \NaraPeriod.\sSamuraiHeraldry{6}
   From here mon spread to be used by the Imperial family more generally
-  and by the \HeianPeriod this had spread to the court nobility, 
+  and by the \HeianPeriod{} this had spread to the court nobility, 
   though given the small and
   highly interconnected noble class, there was little need to use them
   for identification.\sDowerCrests{4}
 
   \textbf{Mon were not used by the samurai warrior class until the
   12th-century Gempei wars}, where they were used on wooden mantlet
-  ("war-door") shields, camp curtains, and flags.\sSamuraiHeraldry{8}
+  (``war-door") shields, camp curtains, and flags.\sSamuraiHeraldry{8}
    Later in period, their use became progressively more
   widespread, leading to their use in such places as armor, sword guards,
   and other pieces of
@@ -207,7 +208,7 @@
   Some mon motifs
   originate in fabric patterns, and mon designs were used on
   clothing from an early age without serving as personal symbols.  In the \MuromachiPeriod, some warrior
-  families wore highly elaborate kimono called 'daimon', or
+  families wore highly elaborate kimono called `daimon', or
   ``great crest", incorporating family crests half as tall as the
   wearer on large billowing sleeves.\sDowerCrests{12} By the late
   Muromachi period, family crests were standardly used in more
@@ -215,14 +216,23 @@
   worn by samurai, generally with three or five prominent 1.5-inch
   mon.\sDowerCrests{15}  Relatedly, mon could be used on \textbf{armor},
   either on small metal fastenings, as large metal crests on helmets,
-  or as large designs on breastplates.
+  or as large designs on breastplates. They were also used on personal items,
+  such as \textbf{dishes} and \textbf{boxes} (e.g., \emph{figure \ref{box}}).
 
   Another place where mon were displayed was on \textbf{noren}, cloth curtains used 
   in doorways to keep out dust and identify a business.  While modern 
   noren are generally labeled with kanji or decorative paintings, 
-  \MomoyamaPeriod folding screen paintings show the use of 
-  mon on noren.\sTurningPoint{224}  A similar use of mon was on
+  \MomoyamaPeriod{} folding screen paintings show the use of 
+  mon on noren.\sTurningPoint{224} (See \emph{figure \ref{noren}}.)
+  A similar use of mon was on
   the camp curtains used in military encampments.
+
+  \begin{figure}[b]
+  \begin{subfigs}
+    \jpgfigure[150]{Wood Sorrel and Chrysanthemum Box}{box}{1650\sRijksB{}}
+    \subfigure[150]{One and Rhombus}{noren}{1600\sRijks{}}
+  \end{subfigs}
+  \end{figure}
 
   Mon were, of course, also used on several different varieties of
   \textbf{banners}.  Many different styles of banner were used on the
@@ -234,7 +244,7 @@
   heraldry used on the battlefield.  Banners could be solid-colored,
   have only colored stripes, or have more complicated pictures or
   passages of text.  In addition, daimyō, the samurai warlords who
-  fought over \SengokuPeriod Japan, often used large three-dimensional
+  fought over \SengokuPeriod{} Japan, often used large three-dimensional
   objects as personal standards instead of banners.
 
 \section{Regulation}
@@ -284,7 +294,7 @@
   banners from a distance.  While the same mon with different colors
   could be used by different members of the same family or different
   divisions of the same army,\sSamuraiHeraldry{24} samurai in the
-  \SengokuPeriod used consistent color schemes for their banners.
+  \SengokuPeriod{} used consistent color schemes for their banners.
   More decorative uses of mon, such as on clothing or lacquered items,
   would not necessarily use these distinctive colors, however.
 
@@ -311,10 +321,12 @@
   banners\sSamuraiHeraldry{43.3} (\emph{figure \ref{solid}}) or ones with basic graphical
   elements but no mon (\emph{figures \ref{basic1}, \ref{basic2}}).\sSamuraiHeraldry{J}
 
+\clearpage
+
   \begin{figure}
   \begin{subfigs}
-  \subfigure{16-petal Chrysanthemum}{chrys}{Chrysanthemum, Emperor Antoku, 1185\sSamuraiHeraldry{A 2}
-  }
+  \subfigure{16-petal Chrysanthemum}{chrys}{Chrysanthemum, Emperor Antoku, 1185\sSamuraiHeraldry{A 2}}
+  \jpgfigure{Three 12-petal Chrysanthemums}{3chrys}{12-petal Chryrsanthemums, 1470\sKenmonShokamon{13}}
   \subfigure{Five-three paulownia}{paul}{Paulownia, 1392\sSamuraiHeraldry{6 2}
   }
   \subfigure{Two Hollyhock Leaves}{hollyhock}{Hollyhock, 1470.\sKamonNoJiten{7}
@@ -323,8 +335,11 @@
   }
   \subfigure{Plum blossom flowerpot}{plum}{ Plum blossom, Tsutsui Junkei, 1582\sSamuraiHeraldry{6.4}
   }
-  \subfigure{Wood Sorrel}{sorrel}{ Wood Sorrel\sOUmajirushi{1.32}
-  }
+  \end{subfigs}
+  \begin{subfigs}
+  \jpgfigure{Bellflower}{bellflower}{Bellflower\sKenmonShokamon{7}}
+    \subfigure{Wood Sorrel}{sorrel}{ Wood Sorrel\sOUmajirushi{1.32}}
+    \jpgfigure{Apricot Leaf}{apricot-leaf}{Apricot Leaf, 1470\sKenmonShokamon{15}}
   \end{subfigs}
   \end{figure}
 
@@ -335,40 +350,26 @@
   various ways by varying the position of the plant or the number of
   petals, buds, or leaves.  Common examples of plants include:
 
+\begin{multicols}{2}
   \begin{itemize}
-\item Chrysanthemum, used by the Imperial line (\emph{figure \ref{chrys}})
-\item Paulownia, used by the Ashikaga clan who ruled Japan in the \MuromachiPeriod (\emph{figure \ref{paul}})
+\item Chrysanthemum, the 16-petal version of which was
+  used by the Imperial line (\emph{figures \ref{chrys}, \ref{3chrys}})
+\item Paulownia, used by the Ashikaga clan who ruled Japan in the \MuromachiPeriod{} (\emph{figure \ref{paul}})
 \item Hollyhock (\emph{figure \ref{hollyhock}})
 \item Bamboo (\emph{figure \ref{bamboo}})
 \item Plum blossom (\emph{figure \ref{plum}})
-\item Chinese bellflower
+\item Chinese bellflower (\emph{figure \ref{bellflower}})
 \item Wisteria
 \item Wood sorrel (\emph{figure \ref{sorrel}})
+\item Apricot leaf (\emph{figure \ref{apricot-leaf}})
   \end{itemize}
-
-  \begin{figure}
-  \begin{subfigs}
-  \subfigure{Sun Disc Banner}{sundisc}{\sOUmajirushi{1.11}
-  }
-  \subfigure{Shadowed, Nine Stars}{stars}{ Emperor Go-Shirakawa, 1160\sSamuraiHeraldry{4}
-  }
-  \subfigure{Snake Eye}{snake}{\sOUmajirushi{3.30}
-  }
-  \subfigure{Rice Bowl}{rice}{\sOUmajirushi{3.23}
-  }
-  \subfigure{Square}{square}{\sOUmajirushi{3.21}
-  }
-  \subfigure{Eyes}{eyes}{\sOUmajirushi{3.12}
-  }
-  \subfigure{Early Stone}{stone}{\sKenmonShokamon{32}
-  }
-  \end{subfigs}
-  \end{figure}
+\end{multicols}
 
   \textbf{Simple geometric shapes} were also common.  Shapes were given
   various names based on objects they resemble.  Common examples
   include:
 
+\begin{multicols}{2}
 \begin{itemize}
 \item A solid circle, or ``sun disc" (\emph{figure
   \ref{sundisc}}).  This is familiar today as the flag of modern Japan,
@@ -383,22 +384,44 @@
 \item Several solid squares, or ``stones"\sKenmonShokamon{32} (\emph{figure \ref{stone}})
 \item Three joined rhombuses,\sSamuraiHeraldry{63} called ``chestnut" or ``pine bark" depending on proportions (\emph{figures \ref{chestnut}, \ref{bark}})
 \end{itemize}
+\end{multicols}
+
+  \begin{figure}[b!]
+  \begin{subfigs}
+  \subfigure{Sun Disc Banner}{sundisc}{\sOUmajirushi{1.11}
+  }
+  \subfigure{Shadowed, Nine Stars}{stars}{ Emperor Go-Shirakawa, 1160\sSamuraiHeraldry{4}
+  }
+  \subfigure{Snake Eye}{snake}{\sOUmajirushi{3.30}
+  }
+  \subfigure{Rice Bowl}{rice}{\sOUmajirushi{3.23}
+  }
+  \subfigure{Square}{square}{\sOUmajirushi{3.21}
+  }
+  \subfigure{Eyes}{eyes}{\sOUmajirushi{3.12}}
+  \end{subfigs}
+  \begin{subfigs}
+  \subfigure{Early Stone}{stone}{\sKenmonShokamon{32}}
+  \subfigure{Chestnut}{chestnut}{Ogasawara\sOUmajirushi{3.1}}
+  \subfigure{Gourds with Rhombuses}{bark}{ ``Pine bark" diamonds on gourds, 1470\sKamonNoJiten{7}
+  }
+  \end{subfigs}
+  \end{figure}
+
+\clearpage
 
   \textbf{Kanji}, Japanese characters of Chinese origin, were another
   common choice.  These were often a reference to a patron deity, the
   first character of a clan's family name, or something that described
   the samurai in question.  One example is Koide Yoshichika, who used
-  the first character in his family name, 'ko', as his mon (\emph{figure
-  \ref{ko}}).\sSamuraiHeraldry{19}
+  the first character in his family name, `ko', as his mon (\emph{figure
+  \ref{ko}}).\sSamuraiHeraldry{19} Longer texts were sometimes also used
+  (\emph{figure \ref{iroha}}).
 
   \begin{figure}
   \begin{subfigs}
-  \subfigure{Chestnut}{chestnut}{Ogasawara\sOUmajirushi{3.1}
-  }
-  \subfigure{Gourds with Rhombuses}{bark}{ ``Pine bark" diamonds on gourds, 1470\sKamonNoJiten{7}
-  }
-  \subfigure{Ko}{ko}{\sOUmajirushi{5.8}
-  }
+  \subfigure{Ko}{ko}{\sOUmajirushi{5.8}}
+  \subfigure{Iroha Banner}{iroha}{\sOUmajirushi{110}}
   \subfigure{Three Tomoe Circle}{tomoe}{Three tomoe.\sSamuraiHeraldry{J9}
   }
   \subfigure{Gate}{gate}{\sOUmajirushi{3.14}
@@ -450,26 +473,8 @@
 \item Other ordinary objects (\emph{figure \ref{teapot}})
 \end{itemize}
 
-  \textbf{Landscape features} were also used.  Examples include:
 
-\begin{itemize}
-\item A wave (\emph{figure \ref{wave}})
-\item Mount Fuji (\emph{figure \ref{fuji}})
-\item ``Suhama", a stylized beach or inlet (\emph{figure \ref{suhama}})
-\item A full moon with cloud (\emph{figure \ref{moon-with-cloud}})
-\item A garden scene (\emph{figure \ref{garden}})
-\item A landscape painted on a fan (\emph{figure \ref{fan-landscape}})
-\end{itemize}
-
-  Finally, the last category of charge is \textbf{animals}, which were used
-  relatively rarely.  The most common animals were butterflies
-  (\emph{figure \ref{butterfly}}) and various birds (e.g., \emph{figures
-  \ref{hawk}, \ref{goose}, \ref{crane}}), but some other examples
-  exist, including a horse (\emph{figure \ref{horse}}), a shrimp
-  (\emph{figure \ref{shrimp}}), a lion (\emph{figure\ref{lion}}), a crab,
-  and a rabbit.
-
-  \begin{figure}
+  \begin{figure}[b]
   \begin{subfigs}
   \subfigure{Fletching Banner}{fletching}{\sOUmajirushi{1.27}
   }
@@ -488,9 +493,30 @@
   \end{subfigs}
   \end{figure}
 
+\clearpage
+
+  \textbf{Landscape features} were also used.  Examples include:
+
+\begin{itemize}
+\item A wave (\emph{figure \ref{wave}})
+\item Mount Fuji (\emph{figure \ref{fuji}})
+\item ``Suhama", a stylized beach or inlet (\emph{figure \ref{suhama}})
+\item A full moon with cloud (\emph{figure \ref{moon-with-cloud}})
+\item A garden scene (\emph{figure \ref{garden}})
+\item A landscape painted on a fan (\emph{figure \ref{fan-landscape}})
+\end{itemize}
+
+  Finally, the last category of charge is \textbf{animals}, which were used
+  relatively rarely.  The most common animals were butterflies
+  (\emph{figure \ref{butterfly}}) and various birds (e.g., \emph{figures
+  \ref{hawk}, \ref{goose}, \ref{crane}, \ref{phoenix}}), but some other examples
+  exist, including a horse (\emph{figure \ref{horse}}), a shrimp
+  (\emph{figure \ref{shrimp}}), a lion (\emph{figure \ref{lion}}), a crab,
+  and a rabbit.
+
   \begin{figure}
   \begin{subfigs}
-  \subfigure{Wave}{wave}{Saito Dosan, 1556\sSamuraiHeraldry{57}
+  \subfigure[60]{Wave}{wave}{Saito Dosan, 1556\sSamuraiHeraldry{57}
   }
   \subfigure{Fuji}{fuji}{\sOUmajirushi{6.34}
   }
@@ -507,19 +533,21 @@
 
   \begin{figure}
   \begin{subfigs}
-  \subfigure{Taira Butterfly}{butterfly}{ The Taira Butterfly, 1185.\sSamuraiHeraldry{A4}
+  \subfigure{Taira Butterfly}{butterfly}{ The Taira Butterfly, 1185\sSamuraiHeraldry{A4}
   }
-  \subfigure{Hawk On Perch}{hawk}{Hawk, 1470.\sKamonNoJiten{7}
+  \subfigure{Hawk On Perch}{hawk}{Hawk, 1470\sKamonNoJiten{7}
   }
-  \jpgfigure{Enclosed Goose}{goose}{Goose on a stirrup or in tongs, 1470.\sKamonNoJiten{7}
+  \jpgfigure{Enclosed Goose}{goose}{Goose on a stirrup or in tongs, 1470\sKamonNoJiten{7}
   }
-  \subfigure{Early Crane}{crane}{Crane, 1470.\sKenmonShokamon{32}
+  \subfigure{Early Crane}{crane}{Crane, 1470\sKenmonShokamon{32}}
+  \jpgfigure{Bands and Phoenix}{phoenix}{H\=o\=o, or Phoenix, 1470\sKenmonShokamon{17}}
+  \end{subfigs}
+  \begin{subfigs}
+  \subfigure{Horse}{horse}{Horse, 1470\sKenmonShokamon{24}
   }
-  \subfigure{Horse}{horse}{Horse, 1470.\sKenmonShokamon{24}
+  \subfigure{Shrimp}{shrimp}{Shrimp, 1470\sKenmonShokamon{49}
   }
-  \subfigure{Shrimp}{shrimp}{Shrimp, 1470.\sKenmonShokamon{49}
-  }
-  \subfigure{Lion}{lion}{Lion with peonies, 1470.\sKenmonShokamon{50}
+  \subfigure{Lion}{lion}{Lion with peonies, 1470\sKenmonShokamon{50}
   }
   \end{subfigs}
   \end{figure}
@@ -531,51 +559,44 @@
   European heraldry, which often featured multiple instances of an asymmetric
   charge, such as an animal, all facing the same direction, most Japanese
   charges were symmetrical, and when an asymmetrical charge like
-  a bird was repeated in a mon, the charges would face each other as
-  a mirror image.
+  a bird or butterfly was repeated in a mon, the charges would often face each other as
+  a mirror image (\emph{figure \ref{facing-butterflies}}).
 
   \begin{figure}
   \begin{subfigs}
-  \subfigure{Five Feathers}{feathers}{1470\sKamonNoJiten{7}
-  }
-  \subfigure{Two And A Half Feathers}{half}{Kikuchi Taketoki, 1334\sSamuraiHeraldry{14}
-  }
+  \jpgfigure{Facing Butterflies}{facing-butterflies}{1470\sKenmonShokamon{10}}
+  \jpgfigure{Three Stars}{three-stars}{1470\sKenmonShokamon{17}}
+  \subfigure{Five Feathers}{feathers}{1470\sKamonNoJiten{7}}
+  \subfigure{Two And A Half Feathers}{half}{Kikuchi Taketoki, 1334\sSamuraiHeraldry{14}}
+  \jpgfigure{Facing Paulownia in Ring}{facing-paulownia}{1470\sKenmonShokamon{14}}
+  \subfigure{Three Fans}{three-fans}{1638\sSamuraiHeraldry{63}}
+  \jpgfigure{Tomoe Triangle}{tomoe-triangle}{1470\sKenmonShokamon{21}}
+  \end{subfigs}
+  \end{figure}
+
+
+
+  The practices for combining multiple instances of a charge into a
+  mon were relatively restricted.  \textbf{Repeated charges within a mon tended to be
+  standard charges}, with geometric shapes (\emph{figure \ref{three-stars}}), feathers (\emph{figures \ref{feathers}, \ref{half}}), or plants (\emph{figure \ref{facing-paulownia}}) the most
+  common.\sSamuraiHeraldry{D2,J1} The arrangements tended to be rather
+  simple.
+
+  \clearpage
+
+  \begin{figure}
+  \begin{subfigs}
   \subfigure{Leaves In Ring}{ring}{\sOUmajirushi{4.32}
   }
   \subfigure{Three in Octogon}{octo}{Inaba Masanari, 1570\sSamuraiHeraldry{54 }
   }
   \subfigure{Turtle Shell Chrys}{turtle}{1470\sKenmonShokamon{22 }
   }
-  \jpgfigure{Mulberry and One in Ring}{ringplus}{1470\sKenmonShokamon{28 }
-  }
-  \subfigure{Pierced Bellflower}{pierce}{Akechi Mitsuhide, 1582\sSamuraiHeraldry{57 }
-  }
+  \jpgfigure{Mulberry and One in Ring}{ringplus}{1470\sKenmonShokamon{28}}
+  \jpgfigure{Turtle Shell Complex}{complex}{1573\sAshikagaBukan{17}}
+  \jpgfigure{Suhama Bell}{bell}{1470\sKenmonShokamon{20}}
   \end{subfigs}
   \end{figure}
-
-  \begin{figure}
-  \begin{subfigs}
-  \subfigure{Eye Yoshi Banner}{yoshi}{Takezaki Suenaga, 1274\sSamuraiHeraldry{57 }
-  }
-  \subfigure{Dai Wisteria}{dai}{Ōkubo Tadayo, 1593\sSamuraiSourcebook{73.4}
-  }
-  \subfigure{Peace Paulownia}{peace}{1470\sKamonNoJiten{7}
-  }
-  \subfigure{Pines And Three}{pines}{1470\sKenmonShokamon{31}
-  }
-  \subfigure{Floating Chrysanthemum}{water}{Kusunoki Masashige, 1336\sSamuraiSourcebook{22.3}
-  }
-  \subfigure{Two Plants}{twoplants}{Yamana Mochitoyo, 1473\sSamuraiSourcebook{73.14}
-  }
-  \subfigure{Arrows And Pine}{arrowspine}{1470\sKenmonShokamon{28}
-  }
-  \end{subfigs}
-  \end{figure}
-
-  The practices for combining multiple instances of a charge into a
-  mon were relatively restricted.  \textbf{Repeated charges within a mon tended to be
-  simple}, with geometric shapes, feathers (\emph{figures \ref{feathers}, \ref{half}}), or leaves the most
-  common.\sSamuraiHeraldry{D2,J1}
 
   Relative to European heraldry, the ways that distinct elements were
   combined into a single mon were limited, and some more complicated
@@ -590,46 +611,97 @@
   A more complicated enclosure was a ``turtle shell", a hexagonal border
   with another thin hexagon inside (\emph{figure \ref{turtle}}).
   Occasionally, this enclosure could enclose
-  multiple types of charges (\emph{figure \ref{ringplus}}).
+  multiple types of charges (\emph{figure \ref{ringplus}, \ref{complex}}).
+  More elaborate enclosures were also known (e.g., \emph{figures
+    \ref{bark}, \ref{goose}, \ref{bell}}).
+
+  \begin{figure}
+  \begin{subfigs}
+  \subfigure{Pierced Bellflower}{pierce}{Akechi Mitsuhide, 1582\sSamuraiHeraldry{57}}
+  \subfigure{Eye Yoshi Banner}{yoshi}{Takezaki Suenaga, 1274\sSamuraiHeraldry{57 }
+  }
+  \subfigure{Dai Wisteria}{dai}{Ōkubo Tadayo, 1593\sSamuraiSourcebook{73.4}
+  }
+  \subfigure{Peace Paulownia}{peace}{1470\sKamonNoJiten{7}
+  }
+  \subfigure{Pines And Three}{pines}{1470\sKenmonShokamon{31}
+  }
+  \end{subfigs}
+  \end{figure}
 
   A similar type of variation was to place a charge on a disc, with
   the charge color and background matching and the disc contrasting,
-  effectively 'piercing' the disc with a charge (\emph{figure
+  effectively `piercing' the disc with a charge (\emph{figure
   \ref{pierce}}).\sSamuraiHeraldry{57}
 
   Characters were sometimes placed among other charges; for example,
   Takezaki Suenaga, when fighting the mongols in 1274, used three
-  square 'eye' designs and a character 'yoshi', meaning ``good
+  square `eye' designs and a character `yoshi', meaning ``good
   fortune" (\emph{figure \ref{yoshi}}).\sSamuraiHeraldry{12} Wisteria's depiction with two
   branches making a circle created an obvious place for another
   charge, which \=Okubo Tadayo (1531--1593) used to include the
-  character 'dai', meaning ``great" (\emph{figure \ref{dai}}).\sSamuraiSourcebook{73.4}
-  An earlier samurai similarly placed the character 'yasu', meaning ``peace",
+  character `dai', meaning ``great" (\emph{figure \ref{dai}}).\sSamuraiSourcebook{73.4}
+  An earlier samurai similarly placed the character `yasu', meaning ``peace",
   in a paulownia (\emph{figure \ref{peace}}).\sKamonNoJiten{7}
   More complicated arrangements were also possible,
   such as this mon with the character for ``three" and
   three multi-level pine trees (\emph{figure \ref{pines}}).
   
-  Aside from enclosures and characters,  it was rare for multiple 
+  Aside from enclosures and characters,  it was relatively
+  uncommon for multiple 
   unrelated charges to be combined.
-  One way of doing this was showing a plant emerging from
-  water, most famously used by Kusunoki Masashige (1294--1336),
+  Different charges could be arranged vertically (\emph{figure \ref{in-pale}})
+    or, less commonly,
+  horizontally (\emph{figure \ref{arrowspine}}).
+  Another arrangment was showing a charge emerging from another charge,
+  most famously the mon used by Kusunoki Masashige (1294--1336),
   who symbolized his support for the emperor by depicting the imperial
-  chrysanthemum supported by water (\emph{figure \ref{water}}).\sSamuraiHeraldry{B1}
-  Other, more unique, combinations are found as well.
+  chrysanthemum supported by water (\emph{figure \ref{water}}).\sSamuraiHeraldry{B1} Another form of emergence was a repeated design, most commonly a plant,
+  emerging from the inside of a ring (e.g., \emph{figures \ref{plant-ring},
+  \ref{weird-ring}}).
+  Examples of charges placed on a background design
+  are found as well (e.g., \emph{figure \ref{road-tomoe}}).
+  A one-and-two arrangement with different charges is occasionally found;
   Yamana S\=ozen Mochitoyo (1404--1473) used a paulownia above two
-  gentian-like plants as his mon (\emph{figure \ref{twoplants}}).\sSamuraiSourcebook{73.14}  Another samurai combined two arrows with a three-level pine
-  tree (\emph{figure \ref{arrowspine}}).
+  gentian-like plants as his mon (\emph{figure \ref{twoplants}}).\sSamuraiSourcebook{73.14} (See also \emph{figure \ref{luck-circles}}.)
+
+  \begin{figure}[b]
+  \begin{subfigs}
+  \subfigure{One Three Stars Banner}{in-pale}{
+    \sOUmajirushi{1.18}
+  }
+  \subfigure{Arrows And Pine}{arrowspine}{1470\sKenmonShokamon{28}}
+  \subfigure{Floating Chrysanthemum}{water}{Kusunoki Masashige, 1336\sSamuraiSourcebook{22.3}}
+  \jpgfigure{Three in Ring with Flowers}{plant-ring}{1470\sKenmonShokamon{33}}
+  \jpgfigure{Crossed Feathers in Ring}{weird-ring}{1470\sKenmonShokamon{11}}
+  \jpgfigure{Road Tomoe}{road-tomoe}{1470\sKenmonShokamon{18}}
+\end{subfigs}
+\begin{subfigs}
+  \subfigure{Two Plants}{twoplants}{Yamana Mochitoyo, 1473\sSamuraiSourcebook{73.14}}
+  \jpgfigure{Luck and Circles}{luck-circles}{1470\sKenmonShokamon{15}}
+  \end{subfigs}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[t]
+  \begin{subfigs}
+  \subfigure{Wisteria Tomoe}{wisteria-tomoe}{\sOUmajirushi{3.9}
+  }
+  \subfigure{Tomoe Stars}{tomoe-stars}{Tomoe stars\sOUmajirushi{4.31}}
+  \jpgfigure{Coin and Stars}{coin-stars}{A coin with stars, 1470\sKenmonShokamon{15}}
+  \end{subfigs}
+  \end{figure}
 
   Another form of variation was depicting one element in such a way
   that it mimiced the standard depiction of another element.  This
   style was rare before the \EdoPeriod, but one example of mimicry is
   the mon of Kuroda Yoshitaka (1546--1604), which depicted wisteria in
   the shape resembling three tomoe swirls (\emph{figure
-  \ref{wisteria-tomoe}}).\sSamuraiSourcebook{36.9,53} Another example
-  replaced the plain circles in the standard nine stars arrangement
-  with swirls of three tomoe, combining the motifs (\emph{figure
-  \ref{tomoe-stars}}).
+  \ref{wisteria-tomoe}}).\sSamuraiSourcebook{36.9,53} Variations on
+  the standard nine stars arrangement were common,  replacing
+  all the stars (\emph{figure
+  \ref{tomoe-stars}}) or just the middle one (\emph{figure \ref{coin-stars}}).
 
   In addition to these obvious forms of variation, there were more
   subtle variations.  Different branches of the same family would
@@ -641,15 +713,9 @@
   registration, exactly what constituted a different mon vs a
   different depiction of the same mon was unclear.
 
-  \begin{figure}
+
+  \begin{figure}[b]
   \begin{subfigs}
-  \subfigure{Wisteria Tomoe}{wisteria-tomoe}{\sOUmajirushi{3.9}
-  }
-  \subfigure{Tomoe Stars}{tomoe-stars}{\sOUmajirushi{4.31}
-  }
-  \subfigure{One Three Stars Banner}{}{
-    \sOUmajirushi{1.18}
-  }
   \subfigure{Bishamonten}{bisha}{The first character of Bishamon-ten, Guardian of the North; 1578\sSamuraiHeraldry{25}
   }
   \subfigure{Star And Crescent}{chiba}{1455\sSamuraiHeraldry{8}
@@ -684,7 +750,7 @@
   Western heraldry's ``canting") where part of the device refers like
   the person's name, beyond just using a character.  One example is Aoyama
   Tadanari (1551--1613), whose family name means ``blue mountain"; his
-  mon featured a blue character for mountain ('yama') on a white
+  mon featured a blue character for mountain (`yama') on a white
   background, or vice versa (\emph{figure
   \ref{aoyama}}).\sSamuraiHeraldry{32}\sOUmajirushi{2.15} (This
   also is an example of the significance of color in mon.)  A
@@ -709,18 +775,37 @@
   mon: written accounts, paintings (mainly of battles), and, most
   usefully, compendia.
   There are two main compendia that were published before 1650:
-  \emph{Kenmon Shokamon} (見聞諸家紋), published 1467--1470, and 
-  \emph{O-umajirushi} (御馬印), published 1624--1644.  Both of these compendia
+  \fnhref{http://dl.ndl.go.jp/info:ndljp/pid/2533035}{\emph{Kenmon Shokamon} (見聞諸家紋),} published 1467--1470, and 
+  \emph{O-umajirushi} (御馬印),\footnote{I have an annotated
+  translation available at \url{http://o-umajirushi.xavid.us/}; the original
+  is available at \url{http://dl.ndl.go.jp/info:ndljp/pid/1288484?__lang=en}.} published 1624--1644.  Both of these compendia
   record the devices used in the preceding periods of conflict. They contain
   a wide variety of mon, providing many of the figures in this handout.
+  I've also uploaded a scanned copy of \fnhref{http://fireflies.xavid.us/wp-content/uploads/2015/11/Ohatamoto-S\%C5\%8Dshirushizu.pdf}{\emph{Ohatamoto S\=oshirushizu}
+  (御簱本惣印図; ``Shogunal Vassals All Emblem Drawings''),} a book from circa 1634 available
+  at the Library of Congress.
+
+  Secondary sources that include period mon include the
+  \fnhref{http://dl.ndl.go.jp/info:ndljp/pid/1015270}{\emph{Daibukan} (大武鑑;
+  ``Great Book of Heraldry''), which is available from the NDL};
+  through the right half of page 55, as numbered there, is period. It is a
+  compilation of earlier secondary sources, including the
+  \fnhref{http://www.wul.waseda.ac.jp/kotenseki/html/bunko01/bunko01_01827/index.html}{\emph{Kamakura Bukan}
+  (鎌倉武鑑),} covering 1185--1333, and the \fnhref{http://www.wul.waseda.ac.jp/kotenseki/html/bunko20/bunko20_00368_0007/index.html}{\emph{Ashikaga-ke Bukan}
+  (足利家武鑑),} covering 1336--1573.
 
   There are also modern compendia of mon, but ones in English and most
   of the ones in Japanese lack specific dates and citations and focus
-  mainly on mon as they were standardized later in the \EdoPeriod or
+  mainly on mon as they were standardized later in the \EdoPeriod{} or
   as they're used today, and thus aren't good resources for period
   practice.  The compendia cited at the end of this handout have at least
   some information about when motifs were used and thus can be somewhat
   useful.
+
+\section{Japanese Heraldry Beyond Banners}
+
+
+\clearpage
 
 \section{Mon in the SCA}
 
@@ -859,14 +944,14 @@
   Since there was no formal registration of mon in the SCA period,
   samurai could generally pick any mon they wished.  There were a few motifs
   that were, however, effectively reserved in period.  The most well
-  known is the sixteen-petaled chrysanthemum ("kiku") mon used
+  known is the sixteen-petaled chrysanthemum (``kiku") mon used
   by the Emperor (\emph{figure \ref{chrys}}), with variations used by other members of the
   imperial family.\sSamuraiHeraldry{6} While people
   outside the imperial line, such Kusunoki Masashige (\emph{figure \ref{water}}), did use a
   chrysanthemum variation, this was an Imperial gift\sSamuraiHeraldry{13},
   so such usage in the SCA might be presumptuous.
 
-  A similar restriction was in place for the paulownia ("kiri") mon
+  A similar restriction was in place for the paulownia (``kiri") mon
   given to the Ashikaga clan by Emperor Godaigo when they effectively
   ruled Japan (\emph{figure \ref{paul}}).  While the Ashikaga bestowed the right to used the
   paulownia to powerful supporters, the motif is strongly associated
@@ -903,17 +988,19 @@
   Carolingia.  I welcome questions, feedback, corrections, and requests for
   assistance assembling sources for use with the Individually Attested
   Patterns Rules.  I may be contacted
-  at \texttt{kihou@mit.edu}.  I also have a blog where I discuss
-  period Japan: http://fireflies.xavid.us/.
+  at \texttt{kihou@mit.edu}.  I have a blog where I discuss
+  period Japan, \url{http://fireflies.xavid.us/}, and a database where I'm
+  gradually compiling period Japanese heraldry from various sources,
+  \url{http://mon.xavid.us/}.
 
   The most up-to-date version of this handout can be found at\\
   \url{http://4d.pianojuice.net/Japan/Introduction\%20to\%20Japanese\%20Crests}.
 
   Feel free to use, modify, or distribute this handout under the terms
-  of Creative Commons Attribution-ShareAlike 3.0 Unported
-  (\url{http://creativecommons.org/licenses/by-sa/3.0/}).  Basically, you
+  of \fnhref{http://creativecommons.org/licenses/by-sa/3.0/}{Creative Commons Attribution-ShareAlike 3.0 Unported}.  Basically, you
   can distribute it freely as long as you give me credit and allow
   others to distribute any changes you make under the same terms.
+  (The mon images themselves are, of course, in the Public Domain.)
 
 \section{Sources Cited}
 

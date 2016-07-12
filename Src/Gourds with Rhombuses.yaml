@@ -3,14 +3,13 @@ categories:
 - Geometric: Rhombus (Stacked)
 - Plant: Gourd
 - Enclosure: Other
-image: !include 'Mon:ChestnutGourd.image.svg'
+- Arrangement: Facing
 kanji: "\u4E8C\u3064\u74E2\u306B\u4E8C\u3064\u677E\u76AE\u83F1"
-date: 1470<<KamonNoJiten 7/>>
+date: 1470
 translation: On two bottle gourds, two pine-bark rhombuses
-imagesource: <<KamonNoJiten 7/>>
+sources: KenmonShokamon 21
 notes: |
-  Used by a provincial samurai.<<KamonNoJiten 7/>>  See also 
+  See also 
   [[http://fireflies.xavid.us/2010/09/06/mon-of-the-week-pine-bark-gourds/|Mon
   of the Week: Pine-bark Gourds]] at [[http://fireflies.xavid.us|Fireflies 
   Sing]].
-owner: a provincial samurai

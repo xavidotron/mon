@@ -2,11 +2,9 @@ transliteration: "Hi\u014Dgi<<IllEnc 56.9/>>"
 name: Cypress Fan
 categories:
 - Object: Fan (Folding)
-image: !include 'Mon:CypressFan.image.svg'
 kanji: "\u6A9C\u6247<<IllEnc 56.9/>>"
-date: 1470<<KamonNoJiten 7/>>
+date: 1470
 translation: Cypress Fan
-imagesource: <<KamonNoJiten 7/>>
-notes: 'Used by a provincial samurai.<<KamonNoJiten 7/>>  See also [[http://fireflies.xavid.us/2010/06/14/motif-of-the-week-folding-fans/|Motif
+sources: KenmonShokamon 21
+notes: 'See also [[http://fireflies.xavid.us/2010/06/14/motif-of-the-week-folding-fans/|Motif
   of the Week: Folding Fans]] on [[http://fireflies.xavid.us/|Fireflies Sing]].'
-owner: a provincial samurai
