@@ -39,7 +39,7 @@ scanned_sources = {
 }
 
 def sourcefmt(s):
-    assert s.startswith('<<') and s.endswith('/>>'), s
+    assert s.startswith('<<') and s.endswith('/>>'), s.encode('utf-8')
     assert ' ' in s or '\n' in s, s
     s = s[2:-3]
     if 'http://' in s or 'https://' in s:
@@ -79,7 +79,10 @@ def get_local_link(match):
 def get_name(f):
     return os.path.basename(str(f)).rsplit('.', 1)[0]
 
+font_dict = {'!': 'kenmonji'}
+
 CITE_RE = re.compile(r'<<[^>]+>>')
+FONT_RE = re.compile(ur'([^a-zA-Z])([!])')
 def yaml_mako(images):
     def yaml_mako_impl(target, source, env):
         makof, yamlf = source
@@ -115,12 +118,18 @@ def yaml_mako(images):
             if s not in sources:
                 sources.append(s + ' (for image)')
         for k in ('kanji', 'transliteration'):
-            if k in d and '<' in d[k]:
-                d[k], source = d[k].split('<', 1)
-                s = sourcefmt('<' + source)
+            if k in d and '<<' in d[k]:
+                d[k], source = d[k].split('<<', 1)
+                s = sourcefmt('<<' + source)
                 if (s not in sources and s + ' (for image)' not in sources
                     and s + ' (for Japanese)' not in sources):
                     sources.append(s + ' (for Japanese)')
+        for k in ('kanji', 'owner'):
+            if k in d:
+                d['modern ' + k] = FONT_RE.sub(r'\1', d[k])
+                d[k] = FONT_RE.sub(lambda m: '<span class="%s">%s</span>' %
+                                   (font_dict[m.group(2)], m.group(1)),
+                                   d[k])
         d['sources'] = '<br />'.join(sources)
         d['categories'] = ', '.join('<a href="../#%s">%s</a>' % ((c,) * 2)
                                     for c in get_categories(d))
@@ -139,6 +148,7 @@ STEM_RE = re.compile(r'^Src/(.+?)(?:\.image)?\.(svg|png|jpg)$')
 all_yaml = []
 thumbsuf_map = {}
 image_map = {}
+image_500s = []
 for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
     m = STEM_RE.search(str(f))
     stem = m.group(1)
@@ -146,6 +156,7 @@ for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
     thumbsuf = suf if suf != 'svg' else 'png'
     pngf = 'gh-pages/Mon/' + stem + '-200.' + thumbsuf
     bigpngf = 'gh-pages/Mon/' + stem + '-500.' + thumbsuf
+    image_500s.append(bigpngf)
     if suf == 'svg':
         c = Command(pngf, f, 'bin/svg_to_png $SOURCE $TARGET 200')
         Depends(c, 'bin/svg_to_png')
@@ -239,3 +250,12 @@ def make_index(yamlfs, categoryfs):
 Command('gh-pages/index.html',
         ['Src/index.mak'] + all_yaml + Glob('Categories/*.yaml'),
         make_index(all_yaml, Glob('Categories/*.yaml')))
+
+# MonHandout
+Command('gh-pages/Introduction to Japanese Crests.pdf',
+        'MonHandout.pdf',
+        Copy('$TARGET', '$SOURCE'))
+c = Command('MonHandout.pdf',
+            'MonHandout.tex',
+            'latexmk -xelatex $SOURCE')
+Depends(c, image_500s)

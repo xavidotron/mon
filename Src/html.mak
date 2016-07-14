@@ -5,6 +5,7 @@
 <style type="text/css">
 th { vertical-align: top }
 </style>
+<link rel="stylesheet" type="text/css" href="http://glyphwiki.org/style?page=Group:%E8%A6%8B%E8%81%9E%E8%AB%B8%E5%AE%B6%E7%B4%8B%E3%81%8B%E3%82%89%E3%81%AE%E5%AD%97%E3%81%84&label=kenmonji" />
 </head>
 <body>
 <a href="..">&lt;&lt;</a>
@@ -13,7 +14,7 @@ th { vertical-align: top }
 <a href="${iname}.${suffix}"><img src="${iname}-500.${thumbsuf}" /></a>
 %endfor
 <table>
-%for k in ['kanji', 'transliteration', 'translation', 'date', 'owner', 'blazon', 'categories', 'notes', 'sources']:
+%for k in ['kanji', 'modern kanji', 'transliteration', 'translation', 'date', 'owner', 'blazon', 'categories', 'notes', 'sources']:
   %if k in context.keys():
     <tr><th>${k.capitalize()}</th><td>${unicode(context[k]).replace('\n\n', '\n\n<p>')}</td></tr>
   %endif

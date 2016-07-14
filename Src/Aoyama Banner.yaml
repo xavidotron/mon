@@ -2,5 +2,4 @@ image: !include 'AoyamaBanner.image.png'
 sources: OUmajirushi 55
 date: 1644
 categories:
-- Character: Other
-- Landscape: Mountain
+- Character: Mountain
