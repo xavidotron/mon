@@ -30,6 +30,7 @@ def get_key(c):
    return (c.replace('Other ', 'ZZY ').replace('Other', 'ZZZ')
             .replace('One', '1').replace('Two', '2').replace('Three', '3')
 	    .replace('Single', '1')
+            .replace(')', '  ')
 	   )
 lastprefix = 'zzz'
 implicit_set = set()
