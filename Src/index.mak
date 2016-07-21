@@ -63,6 +63,10 @@ implicit_set = set()
   %endif
   <h3 id="${c}">${c}</h3>
 
+  %if c in notes_map:
+    <p>${notes_map[c]}</p>
+  %endif
+
   %if c in seealso_map:
     <p>See also: ${', '.join('<a href="#%s">%s</a>' % (sac, sac) for sac in seealso_map[c])}</p>
   %endif

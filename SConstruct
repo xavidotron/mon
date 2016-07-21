@@ -236,13 +236,18 @@ def make_index(yamlfs, categoryfs):
         for c in category_map:
             category_map[c].sort()
         seealso_map = {}
+        notes_map = {}
         for catf in categoryfs:
             with open(str(catf)) as fil:
                 d = yaml.load(fil)
             cat = str(catf).split('/', 1)[1].split('.', 1)[0]
-            seealso_map[cat] = [deyaml_category(c) for c in d['seealso']]
+            if 'seealso' in d:
+                seealso_map[cat] = [deyaml_category(c) for c in d['seealso']]
+            if 'notes' in d:
+                notes_map[cat] = d['notes']
         rendered = tmpl.render(category_map=category_map,
-                               seealso_map=seealso_map)
+                               seealso_map=seealso_map,
+                               notes_map=notes_map)
         with open(str(target[0]), 'w') as ofil:
             ofil.write(rendered.encode('utf-8'))
     return make_index_impl
