@@ -126,7 +126,9 @@ def yaml_mako(images):
                     sources.append(s + ' (for Japanese)')
         for k in ('kanji', 'owner'):
             if k in d:
-                d['modern ' + k] = FONT_RE.sub(r'\1', d[k])
+                modern = FONT_RE.sub(r'\1', d[k])
+                if modern != d[k]:
+                    d['modern ' + k] = modern
                 d[k] = FONT_RE.sub(lambda m: '<span class="%s">%s</span>' %
                                    (font_dict[m.group(2)], m.group(1)),
                                    d[k])
