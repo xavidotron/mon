@@ -1,7 +1,7 @@
 transliteration: "Hi no maru \u014Dgi<<IllEnc 54 2/>>"
 name: Tricolor Sun Fan
 categories:
-- Multicolor (On Banner)
+- Multicolor: On Banner
 - Object: Fan (Folding)
 - Geometric: Circle (Single Plain)
 image: !include 'Mon:SunFan.image.svg'

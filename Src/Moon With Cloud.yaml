@@ -1,4 +1,12 @@
-image: !include 'Mon:MoonWithCloud.image.png'
-date: 1470<<KenmonShokamon 57/>>
+sources: KenmonShokamon 31
+date: 1470
 categories:
-- Landscape: Sky
+- Landscape: Moon (Full)
+- Landscape: Cloud
+notes: |
+  Kenmon Shokamon labels this as 日 (sun; "hi"), but given that the
+  Mochijuki family name means "full moon" (in particular, of the
+  8th lunar month), it can just as easily be a moon.
+owner:
+- Saitō (齊!藤)
+- Mochizuki (望月)

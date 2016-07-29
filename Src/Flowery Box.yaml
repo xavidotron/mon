@@ -1,16 +1,17 @@
-name: Flowery Box
 categories:
+- Plant: Flower Square
+- Plant: Flower Square (Enclosed)
 - Plant: Other Flower
 - Enclosure: Other
-date: 1470<<KamonNoJiten 7/>>
-translation:
-imagesource: <<KamonNoJiten 7/>>
+date: 1470
+sources: KenmonShokamon 29
 notes: |
   Depicted elements unclear.  The inner flower resembles
   [[http://www.baronet4tibet.com/symbolism.html|a
   four-petaled flower used to represent the Four Noble Truths in Buddhism]].
   (Thanks,
-  Cynwrig!)  Used by a provincial samurai.<<KamonNoJiten 7/>>  
+  Cynwrig!) An alternate depiction from the Sasaki copy of Kenmon Shokamon,
+  [[Mon:Sasaki Flowery Box]],
+  depicts both flowers with the standard flower square/rhombus depiction.
   See also [[http://fireflies.xavid.us/2010/12/13/two-mysterious-mon/|Two
   Mysterious Mon]] at [[http://fireflies.xavid.us|Fireflies Sing]].
-owner: a provincial samurai

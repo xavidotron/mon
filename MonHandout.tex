@@ -1,121 +1,6 @@
 \documentclass{article}
 
-\usepackage{calc}
-\usepackage{multicol}
-\usepackage{fontspec}
-\usepackage{xunicode}
-\defaultfontfeatures{Scale = MatchLowercase, Ligatures=TeX}
-\setmainfont{Hiragino Mincho Pro}
-
-\usepackage{enumitem}
-
-\usepackage{graphicx}
-\usepackage[space]{grffile}
-
-\usepackage[margin=.25in]{geometry}
-
-\usepackage{ifthenx}
-\usepackage[implicit=false]{hyperref}
-
-\setlist{noitemsep}
-
-\usepackage{tabularx}
-
-%\tymax=1.25in
-
-\makeatletter
-\def\sflabel#1{%
-  \immediate\write\@auxout{\noexpand\newlabel{#1}{{\arabic{fig}\alph{sf}}{}{}{}{}}}}
-\makeatother
-
-\newcolumntype{C}{>{\centering\arraybackslash}X}
-\newcolumntype{w}[1]{@{}>{\centering\arraybackslash}m{#1}@{}}
-\newcounter{sf}
-\newcounter{fig}
-\setcounter{fig}{0}
-\newenvironment{subfigs}{%
-  \def\colness{}%
-  \def\imgs{}%
-  \def\capts{}%
-  \setcounter{sf}{0}
-  \stepcounter{fig}
-}{%
-  \begin{center}
-  \def\tableness##1{%
-    \begin{tabular}{##1}
-    \imgs \\
-    \capts
-    \end{tabular}}%
-  \expandafter\tableness\expandafter{\colness}%
-  \end{center}
-}
-\newlength\imgwid
-\newcommand\jpgfigure[4][75]{%
-  \subfigureimpl[#1]{#2}{jpg}{#3}{#4}}
-\newcommand\subfigure[4][75]{%
-  \subfigureimpl[#1]{#2}{png}{#3}{#4}}
-\newcommand\subfigureimpl[5][100]{%
-  \stepcounter{sf}%
-  \def\tmp{#4}%
-  \ifx\tmp\empty\else
-    \sflabel{#4}%
-  \fi%,width=#1pt,keepaspectratio
-  \settowidth\imgwid{~\includegraphics[height=#1pt]{gh-pages/Mon/#2-500.#3}~}
-  \ifx\colness\empty
-    \edef\colness{w{\the\imgwid}}%
-    \def\imgs{\includegraphics[height=#1pt]{gh-pages/Mon/#2-500.#3}}%
-    \edef\capts{\noexpand\small (\arabic{fig}\alph{sf}) \unexpanded{#5}}%
-  \else
-    \edef\colness{\colness w{\the\imgwid}}%
-    \edef\imgs{\expandafter\unexpanded\expandafter{\imgs} \unexpanded{& \includegraphics[height=#1pt]{gh-pages/Mon/#2-500.#3}}}%
-    \edef\capts{\expandafter\unexpanded\expandafter{\capts} \unexpanded{& \small }(\arabic{fig}\alph{sf}) \unexpanded{#5}}%
-  \fi
-}
-
-\newcommand\fnhref[2]{%
-  \href{#1}{#2}%
-  \ifthenelse{\equal{#1}{#2}}{}{\footnote{\url{#1}}}}
-
-% Originally from gametex.sty's \sheettitle
-\newcommand\chapter[1]{%
-  \clearpage%
-  \begingroup%
-  \baselineskip0pt%
-  \lineskip3pt%
-  \parskip3pt%
-  \def\baselinestretch{0}%
-  \let\\\par%
-  \parindent0pt%
-  \centering%
-  \hbox to\textwidth{%
-    \hfill%
-    \vbox{%
-      \hsize\textwidth%
-      \advance\hsize-1in%
-      \hrulefill%
-      \vskip\lineskip%
-      {\bfseries#1\par}%
-      \vskip\lineskip%
-      \hrulefill}%
-    \hfill}%
-  \vskip5pt%
-  \vskip\parskip%
-  \endgroup%
-}
-
-\def\NaraPeriod{Nara Period (710--794)}
-\def\HeianPeriod{Heian Period (794--1185)}
-\def\KamakuraPeriod{Kamakura Period (1185--1333)}
-\def\MuromachiPeriod{Muromachi Period (1336--1573)}
-\def\MomoyamaPeriod{Momoyama Period (1573--1603)}
-\def\SengokuPeriod{Sengoku Period (1467--1603)}
-\def\EdoPeriod{Edo Period (1603--1868)}
-
-\def\cited{}
-\newcommand{\newsource}[3]{%
-  \def#1##1{\textsuperscript{#2##1}}%
-  \xdef\cited{\expandafter\unexpanded\expandafter{\cited}\noexpand\item[#2] \unexpanded{#3}}%
-}
+\usepackage{setup}
 
 \newsource{\sAshikagaBukan}{AB}{Ashikagake Bukan (足利家武鑑; “House Ashikaga Book of Heraldry”). \url{http://archive.wul.waseda.ac.jp/kosho/bunko20/bunko20_00368/bunko20_00368_0007/bunko20_00368_0007.html}}
 \newsource{\sDowerCrests}{Dower}{John W. Dower. \emph{The Elements of Japanese Design: A Handbook of Family Crests, Heraldry \& Symbolism}. Shambhala Publications, 1990.}
@@ -134,7 +19,7 @@
 % \TODO{Update Kenmon Shokamon page numers}
 \begin{document}
 
-\chapter{Introduction to Japanese Crests}
+\chapter{Heraldic Display in Medieval Japan}
 
 \section{What is a Mon?}
 

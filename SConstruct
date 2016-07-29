@@ -26,6 +26,7 @@ wiki_sources = {
                 'https://commons.wikimedia.org/wiki/File:'),
     'Wikipedia': ('Wikipedia', 'https://en.wikipedia.org/wiki/'),
     'JaWikipedia': ('Japanese Wikipedia', 'https://ja.wikipedia.org/wiki/'),
+    'Pixta': (u'Pixta', 'https://pixta.jp/illustration/')
 }
 scanned_sources = {
     'Daibukan': (
@@ -35,7 +36,7 @@ scanned_sources = {
     'AshikagaBukan': (
         u'Ashikagake Bukan (足利家武鑑; “House Ashikaga Book of Heraldry”)',
         'http://archive.wul.waseda.ac.jp/kosho/bunko20/bunko20_00368/bunko20_00368_0007/bunko20_00368_0007_p%04d.jpg',
-        u'Kinkadō (金花堂), 1822')
+        u'Kinkadō (金花堂), 1822'),
 }
 
 def sourcefmt(s):
@@ -83,6 +84,12 @@ font_dict = {'!': 'kenmonji'}
 
 CITE_RE = re.compile(r'<<[^>]+>>')
 FONT_RE = re.compile(ur'([^a-zA-Z])([!])')
+
+def font_sub(s):
+    return FONT_RE.sub(lambda m: '<span class="%s">%s</span>' %
+                       (font_dict[m.group(2)], m.group(1)),
+                       s)
+
 def yaml_mako(images):
     def yaml_mako_impl(target, source, env):
         makof, yamlf = source
@@ -124,14 +131,24 @@ def yaml_mako(images):
                 if (s not in sources and s + ' (for image)' not in sources
                     and s + ' (for Japanese)' not in sources):
                     sources.append(s + ' (for Japanese)')
-        for k in ('kanji', 'owner'):
+        for k in ('kanji',):
             if k in d:
                 modern = FONT_RE.sub(r'\1', d[k])
                 if modern != d[k]:
                     d['modern ' + k] = modern
-                d[k] = FONT_RE.sub(lambda m: '<span class="%s">%s</span>' %
-                                   (font_dict[m.group(2)], m.group(1)),
-                                   d[k])
+                d[k] = font_sub(d[k])
+        for k in ('owner',):
+            if k in d:
+                if isinstance(d[k], list):
+                    for i in xrange(len(d[k])):
+                        o = d[k][i]
+                        assert o[-1] == ')'
+                        roomaji, kanji = o[:-1].split(' (')
+                        modern = FONT_RE.sub(r'\1', kanji)
+                        if modern != kanji:
+                            d[k][i] = '%s (%s; %s)' % (
+                                roomaji, font_sub(kanji), modern)
+                    d[k] = ', '.join(d[k])
         d['sources'] = '<br />'.join(sources)
         d['categories'] = ', '.join('<a href="../#%s">%s</a>' % ((c,) * 2)
                                     for c in get_categories(d))
