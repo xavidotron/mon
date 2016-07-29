@@ -2,12 +2,10 @@ transliteration: Futatsu sangai sasa no naka ni sanbon kiri take
 name: Three Bamboo Poles
 categories:
 - Plant: Bamboo
-image: !include 'Mon:ThreeBambooPoles.image.svg'
 kanji: "\u4E8C\u3064\u4E09\u968E\u7B39\u306E\u4E2D\u306B\u4E09\u672C\u5207\u308A\u7AF9"
-date: 1470<<KamonNoJiten 7/>>
+date: 1470
 translation: In the middle of two three-story bamboo grass [leaf stacks], three poles
   cut bamboo
-imagesource: <<KamonNoJiten 7/>>
-notes: 'Used by a provincial samurai.<<KamonNoJiten 7/>>  See also [[http://fireflies.xavid.us/2010/09/06/mon-of-the-week-three-bamboo-poles/|Mon
+sources: KenmonShokamon 32
+notes: 'See also [[http://fireflies.xavid.us/2010/09/06/mon-of-the-week-three-bamboo-poles/|Mon
   of the Week: Three Bamboo Poles]] at [[http://fireflies.xavid.us/|Fireflies Sing]].'
-owner: a provincial samurai

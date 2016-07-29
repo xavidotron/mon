@@ -120,6 +120,7 @@ def yaml_mako(images):
                                 d['notes'])
             d['notes'] = LOCAL_LINK_RE.sub(get_local_link, d['notes'])
             d['notes'] = re.sub(r'//([^/]+)//', r'<i>\1</i>', d['notes'])
+            d['notes'] = font_sub(d['notes'])
         if 'imagesource' in d:
             s = sourcefmt(d['imagesource'])
             if s not in sources:
