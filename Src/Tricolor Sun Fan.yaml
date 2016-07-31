@@ -1,9 +1,12 @@
 transliteration: "Hi no maru \u014Dgi<<IllEnc 54 2/>>"
 name: Tricolor Sun Fan
 categories:
-- Multicolor: On Banner
+- Color: Multicolor (On Banner)
 - Object: Fan (Folding)
 - Geometric: Circle (Single Plain)
+- Color: White on Red
+- Color: Red on White
+- Color: Black on White
 image: !include 'Mon:SunFan.image.svg'
 kanji: "\u65E5\u306E\u4E38\u6247<<IllEnc 54 2/>>"
 date: 1614<<SamuraiHeraldry 62/>>

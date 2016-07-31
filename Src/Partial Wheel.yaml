@@ -1,6 +1,8 @@
 transliteration: Genji guruma jigami / Ikoma Genji guruma
 name: Partial Wheel
-tags: '[[MT:Wheel]], [[MT:Fan]], [[MP:Wheel]]'
+categories:
+- Wheel
+- Color: Blue on Yellow
 image: !include 'Mon:PartialWheel.image.svg'
 kanji: "\u6E90\u6C0F\u8ECA\u5730\u7D19 / \u751F\u99D2\u6E90\u6C0F\u8ECA"
 date: 1598<<SamuraiHeraldry E7,60/>>

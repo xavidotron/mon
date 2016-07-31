@@ -2,6 +2,7 @@ transliteration: Manji<<IllEnc 360 11/>>
 name: Tsugaru Swastika
 categories:
 - Religious: Swastika
+- Color: Yellow on Red
 image: !include 'Mon:TsugaruSwastika.image.svg'
 kanji: "\u4E07\u5B57<<IllEnc 360 11/>>"
 date: 1610
