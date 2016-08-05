@@ -1,4 +1,5 @@
 ## -*- coding: utf-8 -*-
+<%inherit file="base.mak"/>
 <html>
 <head>
 <title>Japanese Heraldry Database</title>
@@ -26,19 +27,13 @@ focusing on early Edo and pre-Edo Japan.  See
 also <a href="http://fireflies.xavid.us/">Fireflies Sing</a>, my more general Feudal Japan blog.</a>
 
 <%
-def get_key(c):
-   return (c.replace('Other ', 'ZZY ').replace('Other', 'ZZZ')
-            .replace('One', '1').replace('Two', '2').replace('Three', '3')
-	    .replace('Single', '1')
-            .replace(')', '  ')
-	   )
 lastprefix = 'zzz'
 implicit_set = set()
 %>
 
 <h2>Contents</h2>
 <ul>
-%for c in sorted(category_map, key=get_key):
+%for c in sorted(category_map, key=self.get_key):
   %if c.startswith(lastprefix):
 , <a href="#${c}">${c.split(': ', 1)[1]}</a>\
   %else:
@@ -56,7 +51,7 @@ implicit_set = set()
 
 <h2>By Category</h2>
 
-%for c in sorted(category_map, key=get_key):
+%for c in sorted(category_map, key=self.get_key):
   %if ' (' in c and c.split(' (', 1)[0] not in implicit_set:
   <% implicit_set.add(c.split(' (', 1)[0]) %>
   <a id="${c.split(' (', 1)[0]}"></a>
@@ -71,10 +66,10 @@ implicit_set = set()
     <p>See also: ${', '.join('<a href="#%s">%s</a>' % (sac, sac) for sac in seealso_map[c])}</p>
   %endif
 
-  %for year, name, thumbsuf, cnt in category_map[c]:
-    <div><a href="Mon/${name}"><span><img src="Mon/${name}-200.${thumbsuf}" /></span><br />${name} (${year})
-    %if cnt > 1:
-      (x${cnt})
+  %for mon in category_map[c]:
+    <div><a href="Mon/${mon['name']}"><span><img src="Mon/${mon['name']}-200.${mon['thumbsuf']}" /></span><br />${mon['name']} (${mon['year']})
+    %if mon['count'] > 1:
+      (x${mon['count']})
     %endif
     </a></div>
   %endfor

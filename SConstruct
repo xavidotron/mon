@@ -2,6 +2,7 @@
 import re, sys, os
 import yaml
 from mako.template import Template
+from mako.lookup import TemplateLookup
 
 def ctor(loader, node):
     return node.value
@@ -9,6 +10,9 @@ yaml.add_constructor('!include', ctor)
 
 #Execute(Delete(Glob("gh-pages/Mon/*")))
 
+pageless_map = {
+  'EricObershaw': 'Obershaw, Eric. Photographs. <a href="http://www.jcastle.info/">http://www.jcastle.info/</a>',
+}
 source_map = {
     'SamuraiHeraldry': 'Turnbull, Stephen. <i>Samurai Heraldry</i>. Osprey Publishing, 2002.',
     'IllEnc': '<i>An Illustrated Encyclopedia of Japanese Family Crests</i>. Graphic-sha, 2001.',
@@ -16,6 +20,7 @@ source_map = {
     'KamonNoJiten': u'Takasawa Hitoshi (高澤等). <i>Kamon no Jiten (家紋の事典; “Family Crest Encyclopedia”)</i>. Ed. Chikano Shigeru (千鹿野茂). Tōkyōdō Shuppan (東京堂出版), 2008.',
     'FCoJ': '<i>Family Crests of Japan</i>. Stone Bridge Press, 2007.',
     'KenmonShokamon': u'<i>Kenmon Shokamon (見聞諸家紋; “Various Observed Family Crests”)</i>. 1467–1470. <a href="http://dl.ndl.go.jp/info:ndljp/pid/2533035">http://dl.ndl.go.jp/info:ndljp/pid/2533035</a>.',
+    'Ohatamoto': u'<i>Ohatamoto sōshirushizu</i> (御簱本惣印図; “Shogunal Vassals All Emblem Drawings”). Library of Congress. 1634. <a href="http://fireflies.xavid.us/wp-content/uploads/2015/11/Ohatamoto-S\%C5\%8Dshirushizu.pdf">http://fireflies.xavid.us/wp-content/uploads/2015/11/Ohatamoto-S\%C5\%8Dshirushizu.pdf</a>',
     'OUmajirushi': u'Xavid “Kihō” Pretzer. <i>O-umajirushi: A 17th-Century Compendium of Samurai Heraldry</i>. The Academy of the Four Directions. 2015.',
     'SamuraiSourcebook': 'Turnbull, Stephen. <i>The Samurai Sourcebook</i>. Cassell & Co, 2000.',
     'Tadoru2': u'<i>Shoku Kamon de Tadoru Anata no Kakei (続家紋でたどるあなたの家系; “Your Family Lineage Followed with Family Crests, Continued”)</i>. Yagishoten (八木書店), 1998.', # https://books.google.com/books?id=F1VdUz1RUosC&dq=%22%E7%A5%9E%E5%AE%B6%22+%E7%89%A9%E9%83%A8&source=gbs_navlinks_s
@@ -41,8 +46,9 @@ scanned_sources = {
 
 def sourcefmt(s):
     assert s.startswith('<<') and s.endswith('/>>'), s.encode('utf-8')
-    assert ' ' in s or '\n' in s, s
     s = s[2:-3]
+    if ' ' not in s and '\n' not in s:
+        return pageless_map[s]
     if 'http://' in s or 'https://' in s:
         title, url, sname = s.split(', ')
         return u'“<a href="%s">%s</a>”. <i>%s</i>.' % (
@@ -98,7 +104,8 @@ def yaml_mako(images):
             d = yaml.load(fil)
         for k in d:
             assert k in ('sources', 'notes', 'date', 'tags', 'owner',
-                         'kanji', 'transliteration', 'name', 'blazon',
+                         'kanji', 'modern kanji',
+                         'transliteration', 'name', 'blazon',
                          'image', 'translation', 'imagesource', 'categories'), (
                 str(yamlf), k)
         d['name'] = get_name(yamlf)
@@ -168,6 +175,7 @@ STEM_RE = re.compile(r'^Src/(.+?)(?:\.image)?\.(svg|png|jpg)$')
 all_yaml = []
 thumbsuf_map = {}
 image_map = {}
+image_200s = []
 image_500s = []
 for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
     m = STEM_RE.search(str(f))
@@ -175,6 +183,7 @@ for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
     suf = m.group(2)
     thumbsuf = suf if suf != 'svg' else 'png'
     pngf = 'gh-pages/Mon/' + stem + '-200.' + thumbsuf
+    image_200s.append(pngf)
     bigpngf = 'gh-pages/Mon/' + stem + '-500.' + thumbsuf
     image_500s.append(bigpngf)
     if suf == 'svg':
@@ -233,28 +242,45 @@ def get_categories(d):
 def make_index(yamlfs, categoryfs):
     def make_index_impl(target, source, env):
         makof = source[0]
-        tmpl = Template(filename=str(makof))
+        tmpl = Template(filename=str(makof),
+                        lookup=TemplateLookup(directories=[
+                    os.path.dirname(os.path.dirname(os.path.abspath(str(makof))))]))
+        all_mon = []
         category_map = {}
         for yamlf in yamlfs:
             with open(str(yamlf)) as fil:
                 d = yaml.load(fil)
             found = False
-            for category in get_categories(d):
+            categories = list(get_categories(d))
+            if 'date' in d:
+                date = d['date']
+                if isinstance(date, basestring) and date != 'Modern':
+                    date = CITE_RE.sub('', date)
+                else:
+                    date = str(date)
+            else:
+                date = 'Modern'
+            mon = dict(
+                year=date,
+                name=get_name(yamlf),
+                thumbsuf=thumbsuf_map[str(yamlf)],
+                count=len(image_map[str(yamlf)]))
+            for k in ('notes', 'owner', 'kanji', 'modern kanji', 'translation',
+                      'transliteration', 'sources'):
+                if k in d:
+                    mon[k] = d[k]
+            if 'owner' in mon and isinstance(mon['owner'], list):
+                mon['owner'] = ', '.join(mon['owner'])
+            mon['categories'] = categories
+            for category in categories:
                 if category not in category_map:
                     category_map[category] = []
-                if 'date' in d:
-                    date = d['date']
-                    if isinstance(date, basestring) and date != 'Modern':
-                        date = int(CITE_RE.sub('', date))
-                else:
-                    date = 'Modern'
-                category_map[category].append((date, get_name(yamlf),
-                                               thumbsuf_map[str(yamlf)],
-                                               len(image_map[str(yamlf)])))
+                category_map[category].append(mon)
                 found = True
             assert found, (str(yamlf), d['tags'])
+            all_mon.append(mon)
         for c in category_map:
-            category_map[c].sort()
+            category_map[c].sort(key=lambda m:m['year'])
         seealso_map = {}
         notes_map = {}
         for catf in categoryfs:
@@ -267,13 +293,19 @@ def make_index(yamlfs, categoryfs):
                 notes_map[cat] = d['notes']
         rendered = tmpl.render(category_map=category_map,
                                seealso_map=seealso_map,
-                               notes_map=notes_map)
+                               notes_map=notes_map,
+                               all_mon=all_mon)
         with open(str(target[0]), 'w') as ofil:
             ofil.write(rendered.encode('utf-8'))
     return make_index_impl
 
 Command('gh-pages/index.html',
-        ['Src/index.mak'] + all_yaml + Glob('Categories/*.yaml'),
+        ['Templates/index.mak'] + all_yaml + Glob('Categories/*.yaml'),
+        make_index(all_yaml, Glob('Categories/*.yaml')))
+
+Command('MonDatabase.tex',
+        ['Templates/MonDatabase.tex.mak']
+        + all_yaml + Glob('Categories/*.yaml'),
         make_index(all_yaml, Glob('Categories/*.yaml')))
 
 # MonHandout
@@ -284,3 +316,8 @@ c = Command('MonHandout.pdf',
             'MonHandout.tex',
             'latexmk -xelatex $SOURCE')
 Depends(c, image_500s)
+
+c = Command('MonDatabase.pdf',
+            'MonDatabase.tex',
+            'latexmk -xelatex $SOURCE')
+Depends(c, image_200s)
