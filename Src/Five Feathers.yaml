@@ -3,10 +3,7 @@ name: Five Feathers
 categories:
 - Feather: Hawk's
 - Arrangement: In Fess (Same)
-image: !include 'Mon:FiveFeathers.image.svg'
 kanji: "\u4E94\u3064\u4E26\u3073\u9DF9\u306E\u7FBD<<IllEnc 218 20/>>"
-date: 1470<<KamonNoJiten 7/>>
+date: 1470
 translation: Five lined-up hawk feathers
-imagesource: <<KamonNoJiten 7/>>
-notes: Used by a provincial samurai.<<KamonNoJiten 7/>>
-owner: a provincial samurai
+sources: KenmonShokamon 40

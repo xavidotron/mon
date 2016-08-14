@@ -3,11 +3,9 @@ name: Feather Fan
 categories:
 - Feather: Hawk's
 - Object: Fan (Other)
-image: !include 'Mon:FeatherFan.image.png'
 kanji: "\u7FBD\u56E3\u6247"
-date: 1470<<KamonNoJiten 7/>>
+date: 1470
 translation: Feather Fan
-imagesource: <<KamonNoJiten 7/>>
-notes: 'Used by a provincial samurai.<<KamonNoJiten 7/>>  See also [[http://fireflies.xavid.us/2010/06/14/motif-of-the-week-folding-fans/|Motif
+sources: KenmonShokamon 40
+notes: 'See also [[http://fireflies.xavid.us/2010/06/14/motif-of-the-week-folding-fans/|Motif
   of the Week: Folding Fans]] on [[http://fireflies.xavid.us/|Fireflies Sing]].'
-owner: a provincial samurai
