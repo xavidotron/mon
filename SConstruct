@@ -321,3 +321,10 @@ c = Command('MonDatabase.pdf',
             'MonDatabase.tex',
             'latexmk -xelatex $SOURCE')
 Depends(c, image_200s)
+
+Command("gh-pages/Zen Meals under Dougen's Pure Standards.pdf",
+        'Ouryouki.pdf',
+        Copy('$TARGET', '$SOURCE'))
+Command('Ouryouki.pdf',
+        'Ouryouki.tex',
+        'latexmk -xelatex $SOURCE')
