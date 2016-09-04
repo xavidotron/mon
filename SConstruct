@@ -50,7 +50,7 @@ def sourcefmt(s):
     if ' ' not in s and '\n' not in s:
         return pageless_map[s]
     if 'http://' in s or 'https://' in s:
-        title, url, sname = s.split(', ')
+        title, url, sname = s.rsplit(', ', 2)
         return u'“<a href="%s">%s</a>”. <i>%s</i>.' % (
             url, title, sname.strip())
     source,rest = s.split(None, 1)
