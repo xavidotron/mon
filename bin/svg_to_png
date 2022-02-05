@@ -2,10 +2,12 @@
 
 set -e
 
-INKSCAPE="/Applications/Inkscape.app/Contents/Resources/bin/inkscape"
+INKSCAPE="/Applications/Inkscape.app/Contents/MacOS/inkscape"
 
-height="$("$INKSCAPE" -w $3 -e `pwd`/"$2" `pwd`/"$1" | awk '/exported to/ {print $7}')"
+height="$("$INKSCAPE" -w $3 -o `pwd`/"$2" `pwd`/"$1" 2>&1 | awk '/exported to/ {print $7}')"
+
+#echo "Height: $height"
 
 if [ $height -gt $3 ] ; then
-    "$INKSCAPE" -h $3 -e `pwd`/"$2" `pwd`/"$1" > /dev/null
+    "$INKSCAPE" -h $3 -o `pwd`/"$2" `pwd`/"$1" > /dev/null
 fi

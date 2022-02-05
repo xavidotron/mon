@@ -89,7 +89,7 @@ def get_name(f):
 font_dict = {'!': 'kenmonji'}
 
 CITE_RE = re.compile(r'<<[^>]+>>')
-FONT_RE = re.compile(ur'([^a-zA-Z])([!])')
+FONT_RE = re.compile(r'([^a-zA-Z])([!])')
 
 def font_sub(s):
     return FONT_RE.sub(lambda m: '<span class="%s">%s</span>' %
@@ -113,7 +113,7 @@ def yaml_mako(images):
         if 'sources' in d:
             for s in d['sources'].split('; '):
                 sources.append(sourcefmt('<<'+s+'/>>'))
-        if 'date' in d and isinstance(d['date'], basestring) and '<' in d['date']:
+        if 'date' in d and isinstance(d['date'], str) and '<' in d['date']:
             d['date'], source = d['date'].split('<', 1)
             sources.append(sourcefmt('<' + source))
         if 'notes' in d:
@@ -148,7 +148,7 @@ def yaml_mako(images):
         for k in ('owner',):
             if k in d:
                 if isinstance(d[k], list):
-                    for i in xrange(len(d[k])):
+                    for i in range(len(d[k])):
                         o = d[k][i]
                         assert o[-1] == ')'
                         roomaji, kanji = o[:-1].split(' (')
@@ -165,7 +165,7 @@ def yaml_mako(images):
         assert '<<' not in rendered, d
         assert '[[' not in rendered, rendered.encode('utf-8')
         with open(str(target[0]), 'w') as fil:
-            fil.write(rendered.encode('utf-8'))
+            fil.write(rendered)
     return yaml_mako_impl
 
 LOCAL_LINK_RE = re.compile(r'\[\[Mon:([^\]|]+)\]\]')
@@ -254,7 +254,7 @@ def make_index(yamlfs, categoryfs):
             categories = list(get_categories(d))
             if 'date' in d:
                 date = d['date']
-                if isinstance(date, basestring) and date != 'Modern':
+                if isinstance(date, str) and date != 'Modern':
                     date = CITE_RE.sub('', date)
                 else:
                     date = str(date)
@@ -296,7 +296,7 @@ def make_index(yamlfs, categoryfs):
                                notes_map=notes_map,
                                all_mon=all_mon)
         with open(str(target[0]), 'w') as ofil:
-            ofil.write(rendered.encode('utf-8'))
+            ofil.write(rendered)
     return make_index_impl
 
 Command('gh-pages/index.html',

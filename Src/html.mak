@@ -16,7 +16,7 @@ th { vertical-align: top }
 <table>
 %for k in ['kanji', 'modern kanji', 'transliteration', 'translation', 'date', 'owner', 'blazon', 'categories', 'notes', 'sources']:
   %if k in context.keys():
-    <tr><th>${k.capitalize()}</th><td>${unicode(context[k]).replace('\n\n', '\n\n<p>')}</td></tr>
+    <tr><th>${k.capitalize()}</th><td>${str(context[k]).replace('\n\n', '\n\n<p>')}</td></tr>
   %endif
 %endfor
 </table>
