@@ -1,6 +1,5 @@
-image: !include 'Mon:ArrowsAndPine.image.png'
 date: 1470
-sources: KenmonShokamon 28
+sources: KenmonShokamon 45
 categories:
 - Feather: Arrow
 - Plant: Pine
