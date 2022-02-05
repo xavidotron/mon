@@ -123,7 +123,7 @@ for i in range(len(all_mon)):
   %for moni in range(len(category_map[c])):
     <% mon = category_map[c][moni] %>
     \begin{minipage}[c][30pt]{30pt}\centering
-    \includegraphics[width=30pt,height=30pt,keepaspectratio]{gh-pages/Mon/${mon['name']}-200.${mon['thumbsuf']}}
+    \includegraphics[width=30pt,height=30pt,keepaspectratio]{docs/Mon/${mon['name']}-200.${mon['thumbsuf']}}
     \end{minipage}
     \footnotesize \#${rev_map[mon['name']] + 1} (${re.sub(r'<<([^>]+)/>>', '', str(mon['year'])).replace(' ', '~')})
     %if moni % 5 == 4:
@@ -177,7 +177,7 @@ imgs = []
       \par \footnotesize ${html_sub(mon['notes'])}
     %endif
     <%
-    imgs.append('gh-pages/Mon/%s-200.%s' % (mon['name'], mon['thumbsuf']))
+    imgs.append('docs/Mon/%s-200.%s' % (mon['name'], mon['thumbsuf']))
     %>
     %if moni % 30 == 29 or moni == len(all_mon) - 1:
       \end{itemize}

@@ -8,7 +8,7 @@ def ctor(loader, node):
     return node.value
 yaml.add_constructor('!include', ctor)
 
-#Execute(Delete(Glob("gh-pages/Mon/*")))
+#Execute(Delete(Glob("docs/Mon/*")))
 
 pageless_map = {
   'EricObershaw': 'Obershaw, Eric. Photographs. <a href="http://www.jcastle.info/">http://www.jcastle.info/</a>',
@@ -182,9 +182,9 @@ for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
     stem = m.group(1)
     suf = m.group(2)
     thumbsuf = suf if suf != 'svg' else 'png'
-    pngf = 'gh-pages/Mon/' + stem + '-200.' + thumbsuf
+    pngf = 'docs/Mon/' + stem + '-200.' + thumbsuf
     image_200s.append(pngf)
-    bigpngf = 'gh-pages/Mon/' + stem + '-500.' + thumbsuf
+    bigpngf = 'docs/Mon/' + stem + '-500.' + thumbsuf
     image_500s.append(bigpngf)
     if suf == 'svg':
         c = Command(pngf, f, 'bin/svg_to_png $SOURCE $TARGET 200')
@@ -194,7 +194,7 @@ for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
     else:
         Command(pngf, f, r'convert $SOURCE -resize 200x200\> $TARGET')
         Command(bigpngf, f, r'convert $SOURCE -resize 500x500\> $TARGET')
-    Command('gh-pages/Mon/%s.%s' % (stem, suf), [f],
+    Command('docs/Mon/%s.%s' % (stem, suf), [f],
             Copy('$TARGET', '$SOURCE'))
     if stem[-1].isdigit():
         yamlf = 'Src/' + stem[:-1] + '.yaml'
@@ -209,7 +209,7 @@ for f in Glob('Src/*.svg') + Glob('Src/*.png') + Glob('Src/*.jpg'):
 for yamlf in all_yaml:
     images = image_map[yamlf]
     stem = yamlf[len('Src/'):-len('.yaml')]
-    htmlf = 'gh-pages/Mon/' + stem + '.html'
+    htmlf = 'docs/Mon/' + stem + '.html'
     c = Command(htmlf, ['Src/html.mak', yamlf], yaml_mako(images))
     Depends(c, 'SConstruct')
 
@@ -299,7 +299,7 @@ def make_index(yamlfs, categoryfs):
             ofil.write(rendered)
     return make_index_impl
 
-Command('gh-pages/index.html',
+Command('docs/index.html',
         ['Templates/index.mak'] + all_yaml + Glob('Categories/*.yaml'),
         make_index(all_yaml, Glob('Categories/*.yaml')))
 
@@ -309,7 +309,7 @@ Command('MonDatabase.tex',
         make_index(all_yaml, Glob('Categories/*.yaml')))
 
 # MonHandout
-Command('gh-pages/Introduction to Japanese Crests.pdf',
+Command('docs/Introduction to Japanese Crests.pdf',
         'MonHandout.pdf',
         Copy('$TARGET', '$SOURCE'))
 c = Command('MonHandout.pdf',
@@ -322,7 +322,7 @@ c = Command('MonDatabase.pdf',
             'latexmk -xelatex $SOURCE')
 Depends(c, image_200s)
 
-Command("gh-pages/Zen Meals under Dougen's Pure Standards.pdf",
+Command("docs/Zen Meals under Dougen's Pure Standards.pdf",
         'Ouryouki.pdf',
         Copy('$TARGET', '$SOURCE'))
 Command('Ouryouki.pdf',

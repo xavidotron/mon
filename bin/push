@@ -4,10 +4,6 @@ set -e
 
 git add Src
 git add Categories
+git add docs/Mon
 git commit -a -m "$@"
 git push
-cd gh-pages/
-git add Mon
-git commit -a -m "$@"
-git push
-cd ..
