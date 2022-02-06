@@ -10,4 +10,8 @@
 *.fls
 *.log
 *.out
+*.xdv
 /MonHandout.pdf
+/MonDatabase.tex
+
+aside-gh-pages/
